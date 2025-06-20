@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "JI5mG0RWAZ658OHPd/DOmUI2nesUA1F190AV5SFv1Ho=",
+  "Source": "WebTicket.API",
+  "BasePath": "_content/WebTicket.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

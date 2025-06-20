@@ -1,0 +1,6 @@
+@WebTicket.API_HostAddress = http://localhost:5223
+
+GET {{WebTicket.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

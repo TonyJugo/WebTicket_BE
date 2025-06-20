@@ -1,0 +1,123 @@
+[
+  {
+    "ContainingType": "WebTicket.API.Controller.AuthController",
+    "Method": "LoginAsync",
+    "RelativePath": "Unitic/Auth/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "loginRequest",
+        "Type": "WebTicket.Domain.Requests.LoginRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.AuthController",
+    "Method": "Logout",
+    "RelativePath": "Unitic/Auth/logout",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.AuthController",
+    "Method": "RegisterAsync",
+    "RelativePath": "Unitic/Auth/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "registerRequest",
+        "Type": "WebTicket.Domain.Requests.RegisterRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.UniversityController",
+    "Method": "AddUniversity",
+    "RelativePath": "Unitic/University/Add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "university",
+        "Type": "WebTicket.Domain.Requests.UniversityRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.UniversityController",
+    "Method": "DeleteUniversity",
+    "RelativePath": "Unitic/University/Delete/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.UniversityController",
+    "Method": "GetUniversityById",
+    "RelativePath": "Unitic/University/Get/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.UniversityController",
+    "Method": "GetAllUniversities",
+    "RelativePath": "Unitic/University/GetAll",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.UniversityController",
+    "Method": "UpdateUniversity",
+    "RelativePath": "Unitic/University/Update/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "WebTicket.Domain.Requests.UniversityRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

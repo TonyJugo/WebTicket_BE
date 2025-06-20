@@ -1,0 +1,15 @@
+D:\ASP.Net\WebTicket\WebTicket.Application\bin\Debug\net9.0\WebTicket.Application.deps.json
+D:\ASP.Net\WebTicket\WebTicket.Application\bin\Debug\net9.0\WebTicket.Application.dll
+D:\ASP.Net\WebTicket\WebTicket.Application\bin\Debug\net9.0\WebTicket.Application.pdb
+D:\ASP.Net\WebTicket\WebTicket.Application\bin\Debug\net9.0\WebTicket.Domain.dll
+D:\ASP.Net\WebTicket\WebTicket.Application\bin\Debug\net9.0\WebTicket.Domain.pdb
+D:\ASP.Net\WebTicket\WebTicket.Application\obj\Debug\net9.0\WebTicket.Application.csproj.AssemblyReference.cache
+D:\ASP.Net\WebTicket\WebTicket.Application\obj\Debug\net9.0\WebTicket.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\ASP.Net\WebTicket\WebTicket.Application\obj\Debug\net9.0\WebTicket.Application.AssemblyInfoInputs.cache
+D:\ASP.Net\WebTicket\WebTicket.Application\obj\Debug\net9.0\WebTicket.Application.AssemblyInfo.cs
+D:\ASP.Net\WebTicket\WebTicket.Application\obj\Debug\net9.0\WebTicket.Application.csproj.CoreCompileInputs.cache
+D:\ASP.Net\WebTicket\WebTicket.Application\obj\Debug\net9.0\WebTicke.6D583191.Up2Date
+D:\ASP.Net\WebTicket\WebTicket.Application\obj\Debug\net9.0\WebTicket.Application.dll
+D:\ASP.Net\WebTicket\WebTicket.Application\obj\Debug\net9.0\refint\WebTicket.Application.dll
+D:\ASP.Net\WebTicket\WebTicket.Application\obj\Debug\net9.0\WebTicket.Application.pdb
+D:\ASP.Net\WebTicket\WebTicket.Application\obj\Debug\net9.0\ref\WebTicket.Application.dll
