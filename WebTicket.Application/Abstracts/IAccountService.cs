@@ -1,4 +1,5 @@
-﻿using WebTicket.Domain.Requests;
+﻿using System.Security.Claims;
+using WebTicket.Domain.Requests;
 
 namespace WebTicket.Application.Abstracts;
 
@@ -6,5 +7,5 @@ public interface IAccountService
 {
     Task RegisterAsync(RegisterRequest registerRequest);
     Task<string> LoginAsync(LoginRequest loginRequest);
-
+    Task<string> LoginWithGoogleAsync(ClaimsPrincipal? principal);
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 using WebTicket.Application.Abstracts;
 using WebTicket.Domain.Constants;
 using WebTicket.Domain.Entities;
@@ -80,7 +81,27 @@ public class AccountService : IAccountService
         return jwtToken;
     }
 
-
+    public async Task<string> LoginWithGoogleAsync(ClaimsPrincipal? principal)
+    {
+        var email = principal.FindFirstValue(ClaimTypes.Email);
+        var user = await _userManager.FindByEmailAsync(email);
+        //kiểm tra nếu user đã tồn tại chưa
+        if (user == null) 
+        {
+            user = User.Create(string.Empty, await GenerateUserId(), string.Empty, email,
+                principal.FindFirstValue(ClaimTypes.GivenName) ?? string.Empty,
+                principal.FindFirstValue(ClaimTypes.Surname) ?? string.Empty,
+                string.Empty, null); // Assuming default university for Google users
+            var result = await _userManager.CreateAsync(user);
+            var addRoleResult = await _userManager.AddToRoleAsync(user, GetStringIdentityRoleName(Role.User));
+            await _userManager.UpdateAsync(user); //cập nhật user sau khi thêm role
+        }
+        //tạo token đăng nhập
+        IList<string> roles = await _userManager.GetRolesAsync(user);
+        var (jwtToken, expirationDateInUtc) = _authTokenProcessor.GenerateJwtToken(user, roles);
+        _authTokenProcessor.WriteAuthTokenAsHttpOnlyCookie("ACCESS_TOKEN", jwtToken, expirationDateInUtc);
+        return jwtToken;
+    }
 
 
     private string GetStringIdentityRoleName(Role role)
@@ -92,7 +113,7 @@ public class AccountService : IAccountService
             Role.Organizer => IdentityRoleConstants.Organizer,
             Role.Admin => IdentityRoleConstants.Admin,
             Role.User => IdentityRoleConstants.User,
-            _ => throw new ArgumentOutOfRangeException(nameof(role), role, "Provided role is not supported.")
+           _ => throw new ArgumentOutOfRangeException(nameof(role), role, "Provided role is not supported.")
         };
     }
     private async Task<string> GenerateUserId()
@@ -103,5 +124,7 @@ public class AccountService : IAccountService
         string generatedId = "User" + id.ToString("D4");
         return generatedId;
     }
+
+
 
 }

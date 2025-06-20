@@ -2723,11 +2723,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\ASP.Net\\WebTicket\\WebTicket.Infrastructure\\WebTicket.Infrastructure.csproj",
+      "projectUniqueName": "D:\\ASP.Net\\WebTicket_BE\\WebTicket.Infrastructure\\WebTicket.Infrastructure.csproj",
       "projectName": "WebTicket.Infrastructure",
-      "projectPath": "D:\\ASP.Net\\WebTicket\\WebTicket.Infrastructure\\WebTicket.Infrastructure.csproj",
+      "projectPath": "D:\\ASP.Net\\WebTicket_BE\\WebTicket.Infrastructure\\WebTicket.Infrastructure.csproj",
       "packagesPath": "C:\\Users\\caoho\\.nuget\\packages\\",
-      "outputPath": "D:\\ASP.Net\\WebTicket\\WebTicket.Infrastructure\\obj\\",
+      "outputPath": "D:\\ASP.Net\\WebTicket_BE\\WebTicket.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -2748,11 +2748,11 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "D:\\ASP.Net\\WebTicket\\WebTicket.Application\\WebTicket.Application.csproj": {
-              "projectPath": "D:\\ASP.Net\\WebTicket\\WebTicket.Application\\WebTicket.Application.csproj"
+            "D:\\ASP.Net\\WebTicket_BE\\WebTicket.Application\\WebTicket.Application.csproj": {
+              "projectPath": "D:\\ASP.Net\\WebTicket_BE\\WebTicket.Application\\WebTicket.Application.csproj"
             },
-            "D:\\ASP.Net\\WebTicket\\WebTicket.Domain\\WebTicket.Domain.csproj": {
-              "projectPath": "D:\\ASP.Net\\WebTicket\\WebTicket.Domain\\WebTicket.Domain.csproj"
+            "D:\\ASP.Net\\WebTicket_BE\\WebTicket.Domain\\WebTicket.Domain.csproj": {
+              "projectPath": "D:\\ASP.Net\\WebTicket_BE\\WebTicket.Domain\\WebTicket.Domain.csproj"
             }
           }
         }

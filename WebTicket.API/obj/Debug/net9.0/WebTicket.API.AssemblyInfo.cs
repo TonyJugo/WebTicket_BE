@@ -11,10 +11,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("2567ea33-4efd-481e-bf38-ca9b24f47772")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("WebTicket.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1e52fad088753f35292592ae102e6f6b67484d94")]
 [assembly: System.Reflection.AssemblyProductAttribute("WebTicket.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WebTicket.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

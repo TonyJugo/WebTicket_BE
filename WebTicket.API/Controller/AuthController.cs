@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure.Core;
+using Google.Apis.Auth.AspNetCore3;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using WebTicket.Application.Abstracts;
@@ -14,7 +17,7 @@ namespace WebTicket.API.Controller
     public class AuthController : ControllerBase
     {
         private readonly IAccountService _accountService;
-    
+
 
         public AuthController(IAccountService service)
         {
@@ -22,7 +25,7 @@ namespace WebTicket.API.Controller
             _accountService = service;
         }
 
-    
+
 
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterRequest registerRequest)
@@ -42,13 +45,13 @@ namespace WebTicket.API.Controller
             {
                 return BadRequest("Invalid login request.");
             }
-            string acessToken = await _accountService.LoginAsync(loginRequest);
+            string accessToken = await _accountService.LoginAsync(loginRequest);
 
             return Ok(new LoginResponse
             {
                 Message = "Login successful.",
                 // Trả về token vào response body để tránh độ trễ lần đầu tạo cookie
-                Token = acessToken
+                Token = accessToken
             });
         }
 
@@ -59,6 +62,34 @@ namespace WebTicket.API.Controller
             Response.Cookies.Delete("ACCESS_TOKEN"); // Xóa cookie đăng nhập
 
             return Ok("Log out successful");
+        }
+
+        [HttpGet("google-request")]
+        public IActionResult GoogleLogin()
+        {
+            var redirectUrl = Url.Action(nameof(GoogleResponse), "Auth", null, Request.Scheme);
+            var properties = new AuthenticationProperties { RedirectUri = redirectUrl };
+            return Challenge(properties, GoogleOpenIdConnectDefaults.AuthenticationScheme);
+        }
+
+        [HttpGet("signin-google")]
+        public async Task<IActionResult> GoogleResponse()
+        {
+            var authenticateResult = await HttpContext.AuthenticateAsync(GoogleOpenIdConnectDefaults.AuthenticationScheme);
+            if (!authenticateResult.Succeeded)
+            {
+                return Unauthorized("HAHA");
+            }
+
+            string accessToken = await _accountService.LoginWithGoogleAsync(authenticateResult.Principal);
+
+            return Ok(new LoginResponse
+            {
+                Message = "Login successful.",
+                // Trả về token vào response body để tránh độ trễ lần đầu tạo cookie
+                Token = accessToken
+            });
+
         }
 
     }

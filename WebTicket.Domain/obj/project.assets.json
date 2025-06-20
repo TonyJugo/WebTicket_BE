@@ -798,11 +798,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\ASP.Net\\WebTicket\\WebTicket.Domain\\WebTicket.Domain.csproj",
+      "projectUniqueName": "D:\\ASP.Net\\WebTicket_BE\\WebTicket.Domain\\WebTicket.Domain.csproj",
       "projectName": "WebTicket.Domain",
-      "projectPath": "D:\\ASP.Net\\WebTicket\\WebTicket.Domain\\WebTicket.Domain.csproj",
+      "projectPath": "D:\\ASP.Net\\WebTicket_BE\\WebTicket.Domain\\WebTicket.Domain.csproj",
       "packagesPath": "C:\\Users\\caoho\\.nuget\\packages\\",
-      "outputPath": "D:\\ASP.Net\\WebTicket\\WebTicket.Domain\\obj\\",
+      "outputPath": "D:\\ASP.Net\\WebTicket_BE\\WebTicket.Domain\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
