@@ -1,6 +1,22 @@
 [
   {
     "ContainingType": "WebTicket.API.Controller.AuthController",
+    "Method": "ForgotPassword",
+    "RelativePath": "Unitic/Auth/forgot-password",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "WebTicket.Domain.Requests.ForgetPasswordRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.AuthController",
     "Method": "GoogleLogin",
     "RelativePath": "Unitic/Auth/google-request",
     "HttpMethod": "GET",
@@ -53,12 +69,44 @@
   },
   {
     "ContainingType": "WebTicket.API.Controller.AuthController",
+    "Method": "resetPassword",
+    "RelativePath": "Unitic/Auth/reset-password",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "WebTicket.Domain.Requests.ResetPasswordRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.AuthController",
     "Method": "GoogleResponse",
     "RelativePath": "Unitic/Auth/signin-google",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.AuthController",
+    "Method": "VerifyOtp",
+    "RelativePath": "Unitic/Auth/verify-otp",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "otpRequest",
+        "Type": "WebTicket.Domain.Requests.OtpRequest",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {

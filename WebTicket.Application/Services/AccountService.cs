@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Caching.Memory;
 using System.Security.Claims;
 using WebTicket.Application.Abstracts;
+using WebTicket.Application.Contracts;
 using WebTicket.Domain.Constants;
 using WebTicket.Domain.Entities;
 using WebTicket.Domain.Enums;
@@ -16,14 +18,16 @@ public class AccountService : IAccountService
     private readonly IUserRepository _userRepository;
     private readonly CustomValidator _validator;
     private readonly IUniversityService _universityService;
+    private readonly IMemoryCache _memoryCache;
     public AccountService(IAuthTokenProcessor authTokenProcessor, UserManager<User> userManager, CustomValidator validator,
-        IUserRepository userRepository, IUniversityService universityService)
+        IUserRepository userRepository, IUniversityService universityService, IMemoryCache memoryCache)
     {
         _authTokenProcessor = authTokenProcessor;
         _userManager = userManager;
         _userRepository = userRepository;
         _validator = validator;
         _universityService = universityService;
+        _memoryCache = memoryCache;
     }
 
     public async Task RegisterAsync(RegisterRequest registerRequest)
@@ -39,7 +43,7 @@ public class AccountService : IAccountService
         }
         //validate registerRequest
         List<string> universityNames = await _universityService.GetAllUniversityNames();
-        var (erros, isValid) = await _validator.ValidateUserAsync(registerRequest, universityNames);
+        var (erros, isValid) = _validator.ValidateUser(registerRequest, universityNames);
         // nếu không thành công do validate thì ném ra exception
         if (!isValid)
         {
@@ -50,7 +54,7 @@ public class AccountService : IAccountService
         var universityId = await _userRepository.GetUniversityIdByNameAsync(registerRequest.UniversityName);
         string id = await GenerateUserId();
         //tạo user mới
-        var user = User.Create(registerRequest.Password, id, registerRequest.Mssv ,registerRequest.Email, registerRequest.FirstName, registerRequest.LastName, registerRequest.PhoneNumber, universityId);
+        var user = User.Create(id, registerRequest.Mssv ,registerRequest.Email, registerRequest.FirstName, registerRequest.LastName, registerRequest.PhoneNumber, universityId);
         user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, registerRequest.Password); //hash password trước khi lưu vào bảng AspNetUsers
         //gọi hàm CreateAsync để vừa check validate vừa lưu vào bảng AspNetUsers
          await _userManager.CreateAsync(user);
@@ -88,7 +92,7 @@ public class AccountService : IAccountService
         //kiểm tra nếu user đã tồn tại chưa
         if (user == null) 
         {
-            user = User.Create(string.Empty, await GenerateUserId(), string.Empty, email,
+            user = User.Create(await GenerateUserId(), string.Empty, email,
                 principal.FindFirstValue(ClaimTypes.GivenName) ?? string.Empty,
                 principal.FindFirstValue(ClaimTypes.Surname) ?? string.Empty,
                 string.Empty, null); // Assuming default university for Google users
@@ -102,7 +106,58 @@ public class AccountService : IAccountService
         _authTokenProcessor.WriteAuthTokenAsHttpOnlyCookie("ACCESS_TOKEN", jwtToken, expirationDateInUtc);
         return jwtToken;
     }
+    public Task<SendEmailRequest> CreateOtp(string email)
+    {
+        var otp = new Random().Next(100000, 999999).ToString();
+        _memoryCache.Set($"otp_{email}", otp, TimeSpan.FromMinutes(5));
+        var emailRequest = new SendEmailRequest(email, "Your OTP", $"Your OTP is <strong style='font-size: 20px;'>{otp}</strong>", true);
+        return Task.FromResult(emailRequest);
+    }
 
+    public async Task<(bool, string)> VerifyOtp(string email, string otp)
+    {
+        if (_memoryCache.TryGetValue($"otp_{email}", out string cachedOtp))
+        {
+            if (cachedOtp == otp)
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+                if(user == null)
+                {
+                    throw new UserNotFoundException("User not found");
+                }
+                //gernater jwt token dựa trên role và user
+                IList<string> roles = await _userManager.GetRolesAsync(user);
+
+                var (jwtToken, expirationDateInUtc) = _authTokenProcessor.GenerateJwtToken(user, roles);
+
+                _authTokenProcessor.WriteAuthTokenAsHttpOnlyCookie("RESET_TOKEN", jwtToken, expirationDateInUtc);
+              
+
+                _memoryCache.Remove($"otp_{email}"); // Xóa OTP sau khi xác thực thành công
+
+                return (true, jwtToken);
+            }
+        }
+        return (false, ""); // Trả về false nếu OTP không hợp lệ hoặc không tồn tại
+    }
+
+    public async Task ChangePassword(string userId, string newPassword)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if(user == null)
+        {
+            throw new UserNotFoundException($"User with ID {userId} not found.");
+        }
+        //validate password
+        var (errors, isValid) = _validator.ValidatePassword(newPassword);
+        if (!isValid)
+        {
+            throw new UpdateAddFailedException(errors);
+        }
+        var hashedPassword = _userManager.PasswordHasher.HashPassword(user, newPassword);
+        user.PasswordHash = hashedPassword;
+        await _userManager.UpdateAsync(user);
+    }
 
     private string GetStringIdentityRoleName(Role role)
     {

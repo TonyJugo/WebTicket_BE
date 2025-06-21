@@ -10,6 +10,7 @@ using WebTicket.Application.Services;
 using WebTicket.Domain.Constants;
 using WebTicket.Domain.Entities;
 using WebTicket.Infrastructure;
+using WebTicket.Infrastructure.Contracts;
 using WebTicket.Infrastructure.Options;
 using WebTicket.Infrastructure.Processors;
 using WebTicket.Infrastructure.Repositories;
@@ -32,7 +33,12 @@ namespace WebTicket.API
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IUniversityRepository, UniversityRepository>();
             builder.Services.AddScoped<IUniversityService, UniversityService>();
+            builder.Services.AddScoped<IMailService, GmailService>();
 
+            //add memory cache
+            builder.Services.AddMemoryCache();
+
+            builder.Services.Configure<GmailOptions>(builder.Configuration.GetSection(GmailOptions.GmailOptionsKey));
             //lấy JwtOptions từ appsettings.json
             //ánh xạ vào property trong JwtOptions class qua DI
             builder.Services.Configure<JwtOptions>(

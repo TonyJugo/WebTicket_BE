@@ -1,11 +1,16 @@
-﻿using Azure.Core;
-using Google.Apis.Auth.AspNetCore3;
+﻿using Google.Apis.Auth.AspNetCore3;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using WebTicket.Application.Abstracts;
+using WebTicket.Application.Contracts;
+using WebTicket.Domain.Entities;
 using WebTicket.Domain.Requests;
+
 
 
 
@@ -17,12 +22,15 @@ namespace WebTicket.API.Controller
     public class AuthController : ControllerBase
     {
         private readonly IAccountService _accountService;
+        private readonly UserManager<User> _userManager;
+        private readonly IMailService _emailService;
 
-
-        public AuthController(IAccountService service)
+        public AuthController(IAccountService service, UserManager<User> userManager, IMailService emailService)
         {
             // Constructor logic if needed
             _accountService = service;
+            _userManager = userManager;
+            _emailService = emailService;
         }
 
 
@@ -78,7 +86,7 @@ namespace WebTicket.API.Controller
             var authenticateResult = await HttpContext.AuthenticateAsync(GoogleOpenIdConnectDefaults.AuthenticationScheme);
             if (!authenticateResult.Succeeded)
             {
-                return Unauthorized("HAHA");
+                return Unauthorized("Failed");
             }
 
             string accessToken = await _accountService.LoginWithGoogleAsync(authenticateResult.Principal);
@@ -89,8 +97,51 @@ namespace WebTicket.API.Controller
                 // Trả về token vào response body để tránh độ trễ lần đầu tạo cookie
                 Token = accessToken
             });
-
         }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody]ForgetPasswordRequest request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null) return BadRequest("User not found!");
+
+            var emailRequest = await _accountService.CreateOtp(request.Email);
+
+            await _emailService.SendEmailAsync(emailRequest);
+
+            return Ok("OTP sent to email");
+        }
+
+        [HttpPost("verify-otp")]
+        public async Task<IActionResult> VerifyOtp([FromBody] OtpRequest otpRequest)
+        {
+           (bool status, string token) = await _accountService.VerifyOtp(otpRequest.Email, otpRequest.Otp);
+            if (status)
+            {
+                return Ok(new
+                {
+                    Message = "OTP verified successfully",
+                    Token = token
+                });
+            }
+            return BadRequest("OTP expired or not found");
+        }
+
+        [HttpPost("reset-password")]
+        [Authorize]
+        public async Task<IActionResult> resetPassword([FromBody]ResetPasswordRequest request)
+        {
+            var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(user))
+            {
+                return BadRequest("User not found");
+            }
+            await _accountService.ChangePassword(user, request.Password);
+            Response.Cookies.Delete("RESET_TOKEN"); // Xóa cookie reset password
+            return Ok("Password reset successfully");
+        }
+
+
 
     }
 

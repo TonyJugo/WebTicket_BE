@@ -31,19 +31,24 @@ namespace WebTicket.Application.Services
                 throw new UniversityNameAlreadyExistsException(university.Name);
             }
             //validate
-            var (erros, isValid) = await _validator.ValidateUniversityAsync(university);
+            var (erros, isValid) = _validator.ValidateUniversity(university);
             if (!isValid)
             {
-                throw new UpdateAddUniFailedException(erros);
+                throw new UpdateAddFailedException(erros);
             }
             University add = new University { Id = await GenerateUniId(), Name = university.Name };
             
             await _universityRepo.AddUniversity(add);
         }
 
-        public Task DeleteUniversityById(string id)
+        public async Task DeleteUniversityById(string id)
         {
-            return _universityRepo.DeleteUniversityById(id);
+            var university = await _universityRepo.GetUniversityById(id);
+            if(university == null)
+            {
+                throw new ObjectNotFoundException($"University with id {id}");
+            }
+            await _universityRepo.DeleteUniversityById(id);
         }
 
         public Task<List<University>> GetAllUniversity()
@@ -65,16 +70,25 @@ namespace WebTicket.Application.Services
         {
             //trim all
             StringTrimmerExtension.TrimAllString(university);
+            //check xem universityUpdate có tồn tại ko
+            var universityId = await _universityRepo.GetUniversityById(id);
+            if (universityId == null)
+            {
+                throw new ObjectNotFoundException($"University with id {id}");
+            }
+
+            //check universityName đó đã tồn tại chưa
             var universityExists = await _universityRepo.GetUniversityByName(university.Name);
+            
             if (universityExists != null)
             {
                 throw new UniversityNameAlreadyExistsException(university.Name);
             }
             //validate
-            var (erros, isValid) = await _validator.ValidateUniversityAsync(university);
+            var (erros, isValid) = _validator.ValidateUniversity(university);
             if (!isValid)
             {
-                throw new UpdateAddUniFailedException(erros);
+                throw new UpdateAddFailedException(erros);
             }
             await _universityRepo.UpdateUniversityById(id, university);
         }
