@@ -8,14 +8,17 @@ using WebTicket.Domain.Exceptions;
 using WebTicket.Domain.Requests;
 using System.ComponentModel;
 using WebTicket.Application.Abstracts;
+using Microsoft.Win32;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 public class CustomValidator
 {
 
-    public async Task<(List<string>, bool)> ValidateUserAsync(RegisterRequest register, List<string> universityNames)
+    public (List<string>, bool) ValidateUser(RegisterRequest register, List<string> universityNames)
     {
         //email, password ko cần check null
         var errors = new List<ErrorResponse>();
+
         //email
         if (!Regex.IsMatch(register.Email, @"^(?!.*\s).+@(gmail\.com|fpt\.edu\.vn)$"))
         {
@@ -25,30 +28,32 @@ public class CustomValidator
             });
         }
 
-        //password
-        if (register.Password.Length < 8)
-        {
-            errors.Add(new ErrorResponse
-            {
-   
-                Description = "\nPassword must be at minimum 8 characters long"
-            });
-        }
-        if (register.Password.Length > 16)
-        {
-            errors.Add(new ErrorResponse
-            {
-              
-                Description = "\nPassword must be at maximum 16 characters long"
-            });
-        }
 
+        //password
+        {
+            if (register.Password.Length < 8)
+            {
+                errors.Add(new ErrorResponse
+                {
+
+                    Description = "\nPassword must be at minimum 8 characters long"
+                });
+            }
+            if (register.Password.Length > 16)
+            {
+                errors.Add(new ErrorResponse
+                {
+
+                    Description = "\nPassword must be at maximum 16 characters long"
+                });
+            }
+        }
         //FirstName
         if (string.IsNullOrWhiteSpace(register.FirstName))
         {
             errors.Add(new ErrorResponse
             {
-     
+
                 Description = "\nFirst name can't be null"
             });
         }
@@ -57,7 +62,7 @@ public class CustomValidator
         if (!Regex.IsMatch(register.FirstName, @"^\p{L}+$"))
             errors.Add(new ErrorResponse
             {
-         
+
                 Description = "\nFirst name contains only characters"
             });
 
@@ -66,7 +71,7 @@ public class CustomValidator
         {
             errors.Add(new ErrorResponse
             {
-         
+
                 Description = "\nLast name can't be null"
             });
         }
@@ -82,7 +87,7 @@ public class CustomValidator
         {
             errors.Add(new ErrorResponse
             {
-           
+
                 Description = "\nPhone number can't be null"
             });
         }
@@ -92,7 +97,7 @@ public class CustomValidator
         {
             errors.Add(new ErrorResponse
             {
-           
+
                 Description = "\nPhone number must be at 10 digits"
             });
         }
@@ -102,7 +107,7 @@ public class CustomValidator
         {
             errors.Add(new ErrorResponse
             {
-               
+
                 Description = "\nInvalid phone number format"
             });
         }
@@ -112,7 +117,7 @@ public class CustomValidator
         {
             errors.Add(new ErrorResponse
             {
-         
+
                 Description = "\nUniversity ID can't be null"
             });
         }
@@ -125,22 +130,47 @@ public class CustomValidator
                 break;
             }
         }
-        if(!a)
+        if (!a)
         {
             errors.Add(new ErrorResponse
             {
-                Description = "\nUniversity available: \n1. Đại học FPT\n2. Đại học Bách Khoa\n3. Đại học Khoa Học Tự Nhiên\n4. Đại học Công Nghệ Thông Tin"
+                Description = "\nUniversity available:\n" + string.Join("\n", universityNames.Select((name, index) => $"{index + 1}. {name}"))
             });
         }
         return errors.Any() ? (errors.Select(e => e.Description).ToList(), false) : (new List<string>(), true);
     }
-    public async Task<(List<string>, bool)> ValidateUniversityAsync(UniversityRequest request){
+    public (List<string>, bool) ValidateUniversity(UniversityRequest request)
+    {
         var errors = new List<ErrorResponse>();
         if (!Regex.IsMatch(request.Name, @"^Đại học( [A-ZÀ-Ỵ][a-zà-ỹ]*)+$"))
         {
             errors.Add(new ErrorResponse
             {
                 Description = "\nUniversity name must start with 'Đại học' each character at the start of university name must be uppercase"
+            });
+        }
+        return errors.Any() ? (errors.Select(e => e.Description).ToList(), false) : (new List<string>(), true);
+    }
+
+    public (List<string>, bool) ValidatePassword(string password)
+    {
+        var errors = new List<ErrorResponse>();
+        //password
+
+        if (password.Length < 8)
+        {
+            errors.Add(new ErrorResponse
+            {
+
+                Description = "\nPassword must be at minimum 8 characters long"
+            });
+        }
+        if (password.Length > 16)
+        {
+            errors.Add(new ErrorResponse
+            {
+
+                Description = "\nPassword must be at maximum 16 characters long"
             });
         }
         return errors.Any() ? (errors.Select(e => e.Description).ToList(), false) : (new List<string>(), true);

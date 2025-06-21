@@ -350,10 +350,10 @@ D:\ASP.Net\WebTicket_BE\WebTicket.API\obj\Debug\net9.0\staticwebassets\msbuild.b
 D:\ASP.Net\WebTicket_BE\WebTicket.API\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.WebTicket.API.props
 D:\ASP.Net\WebTicket_BE\WebTicket.API\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.WebTicket.API.props
 D:\ASP.Net\WebTicket_BE\WebTicket.API\obj\Debug\net9.0\staticwebassets.pack.json
-D:\ASP.Net\WebTicket_BE\WebTicket.API\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 D:\ASP.Net\WebTicket_BE\WebTicket.API\obj\Debug\net9.0\WebTicke.4876D801.Up2Date
 D:\ASP.Net\WebTicket_BE\WebTicket.API\obj\Debug\net9.0\WebTicket.API.dll
 D:\ASP.Net\WebTicket_BE\WebTicket.API\obj\Debug\net9.0\refint\WebTicket.API.dll
 D:\ASP.Net\WebTicket_BE\WebTicket.API\obj\Debug\net9.0\WebTicket.API.pdb
 D:\ASP.Net\WebTicket_BE\WebTicket.API\obj\Debug\net9.0\WebTicket.API.genruntimeconfig.cache
 D:\ASP.Net\WebTicket_BE\WebTicket.API\obj\Debug\net9.0\ref\WebTicket.API.dll
+D:\ASP.Net\WebTicket_BE\WebTicket.API\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
