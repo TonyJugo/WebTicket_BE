@@ -48,6 +48,9 @@ public class GlobalExceptionHandler : IExceptionHandler
             UpdateAddFailedException => (HttpStatusCode.BadRequest, exception.Message),
             UserNotFoundException => (HttpStatusCode.NotFound, exception.Message),
             ObjectNotFoundException => (HttpStatusCode.NotFound, exception.Message),
+            ObjPropertyAlreadyExists => (HttpStatusCode.Conflict, exception.Message),
+            NotValidEventStatusException => (HttpStatusCode.BadRequest, exception.Message),
+
             // _ là default
             _ => (HttpStatusCode.InternalServerError, $"An unexpected error occurred: {exception.Message}")
         };

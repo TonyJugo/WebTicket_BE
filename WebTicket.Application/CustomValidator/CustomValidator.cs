@@ -112,13 +112,13 @@ public class CustomValidator
             });
         }
 
-        //UniversityId
+        //UniversityName
         if (string.IsNullOrWhiteSpace(register.UniversityName))
         {
             errors.Add(new ErrorResponse
             {
 
-                Description = "\nUniversity ID can't be null"
+                Description = "\nUniversity Name can't be null"
             });
         }
         bool a = false;
@@ -175,4 +175,75 @@ public class CustomValidator
         }
         return errors.Any() ? (errors.Select(e => e.Description).ToList(), false) : (new List<string>(), true);
     }
+    public (List<string>, bool) ValidateEventRequest(EventRequest eventRequest, List<string> categoryNames)
+    {
+        //email, password ko cần check null
+        var errors = new List<ErrorResponse>();
+        //description
+        if(string.IsNullOrWhiteSpace(eventRequest.Description))
+        {
+            errors.Add(new ErrorResponse
+            {
+                Description = "\nDescription can't be null"
+            });
+        }
+        //eventDate
+        if (eventRequest.Date_Start == default || eventRequest.Date_End == default)
+        {
+            errors.Add(new ErrorResponse
+            {
+                Description = "\nStart date and end date can't be null"
+            });
+        }
+        if (eventRequest.Date_Start < DateTime.Now)
+        {
+            errors.Add(new ErrorResponse
+            {
+                Description = "\nStart date must be greater than current date"
+            });
+        }
+        if (eventRequest.Date_End < eventRequest.Date_Start)
+        {
+            errors.Add(new ErrorResponse
+            {
+                Description = "\nEnd date must be greater than start date"
+            });
+        }
+
+        //event price
+        if (eventRequest.Price < 0)
+        {
+            errors.Add(new ErrorResponse
+            {
+                Description = "\nPrice must be greater than or equal to 0"
+            });
+        }
+        //eventName
+        if (string.IsNullOrWhiteSpace(eventRequest.Name))
+        {
+            errors.Add(new ErrorResponse
+            {
+
+                Description = "\n event name can't be null"
+            });
+        }
+        bool a = false;
+        foreach (var category in categoryNames)
+        {
+            if (category.Equals(eventRequest.CategoryName))
+            {
+                a = true;
+                break;
+            }
+        }
+        if (!a)
+        {
+            errors.Add(new ErrorResponse
+            {
+                Description = "\nCategory available:\n" + string.Join("\n", categoryNames.Select((name, index) => $"{index + 1}. {name}"))
+            });
+        }
+        return errors.Any() ? (errors.Select(e => e.Description).ToList(), false) : (new List<string>(), true);
+    }
+
 }

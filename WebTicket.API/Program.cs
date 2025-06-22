@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Hangfire;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +35,20 @@ namespace WebTicket.API
             builder.Services.AddScoped<IUniversityRepository, UniversityRepository>();
             builder.Services.AddScoped<IUniversityService, UniversityService>();
             builder.Services.AddScoped<IMailService, GmailService>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IEventRepository, EventRepository>();
+            builder.Services.AddScoped<IEventService, EventService>();
+            //add hang fire
+            //lưu job vào db, nếu xài cách khác job tự động xóa khi tắt app / app crash => mất job
+            builder.Services.AddHangfire(config =>
+            {
+                config.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
+            builder.Services.AddHangfireServer(); //add hangfire server để chạy job
+            builder.Services.AddScoped<IEventRepository, EventRepository>();
 
+          
             //add memory cache
             builder.Services.AddMemoryCache();
 
@@ -140,6 +154,9 @@ namespace WebTicket.API
 
 
             app.UseHttpsRedirection(); //chuyển hướng http tới https
+
+            app.UseHangfireDashboard("/hangfire"); // dashboard hangfire
+
             app.UseExceptionHandler();
 
             app.UseAuthentication();

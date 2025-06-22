@@ -80,7 +80,7 @@ namespace WebTicket.Application.Services
             //check universityName đó đã tồn tại chưa
             var universityExists = await _universityRepo.GetUniversityByName(university.Name);
             
-            if (universityExists != null)
+            if (universityExists != null && universityExists.Id != universityId.Id)
             {
                 throw new UniversityNameAlreadyExistsException(university.Name);
             }

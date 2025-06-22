@@ -28,6 +28,19 @@ namespace WebTicket.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    CateID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Is_Disable = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.CateID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Universities",
                 columns: table => new
                 {
@@ -58,6 +71,30 @@ namespace WebTicket.Infrastructure.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Events",
+                columns: table => new
+                {
+                    EventID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Date_Start = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Date_End = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Price = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CateID = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Events", x => x.EventID);
+                    table.ForeignKey(
+                        name: "FK_Events_Categories_CateID",
+                        column: x => x.CateID,
+                        principalTable: "Categories",
+                        principalColumn: "CateID",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -194,6 +231,22 @@ namespace WebTicket.Infrastructure.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "Mssv", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UniversityId", "UserName", "wallet" },
+                values: new object[] { "User0001", 0, "53a7889a-d428-454c-9a6e-6eee39908eda", "caohoangnhat58@gmail.com", false, "Cao", "Hoàng Nhật", false, null, "", null, null, "AQAAAAEAACcQAAAAEJ5b1k2Z7a3z4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6A==", "01232302459", false, null, false, null, null, 0 });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "CateID", "Is_Disable", "Name" },
+                values: new object[,]
+                {
+                    { "Cate0001", false, "Entertainment" },
+                    { "Cate0002", false, "Education" },
+                    { "Cate0003", false, "Sharing" },
+                    { "Cate0004", false, "Music" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Universities",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
@@ -202,6 +255,29 @@ namespace WebTicket.Infrastructure.Migrations
                     { "Uni0002", "Đại học Bách Khoa" },
                     { "Uni0003", "Đại học Khoa Học Tự Nhiên" },
                     { "Uni0004", "Đại học Công Nghệ Thông Tin" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "000000000001", "User0001" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "Mssv", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UniversityId", "UserName", "wallet" },
+                values: new object[,]
+                {
+                    { "User0002", 0, "279dd8e2-3f59-4a8e-9f04-79f7e71be73a", "nhatchse184713@fpt.edu.vn", false, "Cao", "Hoàng Nhật", false, null, "", null, null, "AQAAAAEAACcQAAAAEJ5b1k2Z7a3z4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6A==", "01232302459", false, null, false, "Uni0001", null, 0 },
+                    { "User0003", 0, "2ad8dd62-d07f-45fd-8a19-55eedc92de4e", "nhatchse184714@fpt.edu.vn", false, "Cao", "Hoàng Nhật", false, null, "", null, null, "AQAAAAEAACcQAAAAEJ5b1k2Z7a3z4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6A==", "01232302459", false, null, false, "Uni0001", null, 0 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[,]
+                {
+                    { "000000000002", "User0002" },
+                    { "000000000003", "User0003" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -247,6 +323,11 @@ namespace WebTicket.Infrastructure.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Events_CateID",
+                table: "Events",
+                column: "CateID");
         }
 
         /// <inheritdoc />
@@ -268,10 +349,16 @@ namespace WebTicket.Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Events");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Universities");

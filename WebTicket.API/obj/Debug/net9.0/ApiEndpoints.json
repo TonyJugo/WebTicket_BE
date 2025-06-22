@@ -110,6 +110,262 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "WebTicket.API.Controller.CategoryController",
+    "Method": "GetAllCategories",
+    "RelativePath": "Unitic/Category",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.CategoryController",
+    "Method": "AddCategory",
+    "RelativePath": "Unitic/Category",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "category",
+        "Type": "WebTicket.Domain.Requests.CategoryRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.CategoryController",
+    "Method": "GetCategoryById",
+    "RelativePath": "Unitic/Category/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.CategoryController",
+    "Method": "UpdateCategory",
+    "RelativePath": "Unitic/Category/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "WebTicket.Domain.Requests.CategoryUpdateRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.CategoryController",
+    "Method": "SwitchCategory",
+    "RelativePath": "Unitic/Category/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.CategoryController",
+    "Method": "GetAllDisabledCategories",
+    "RelativePath": "Unitic/Category/Disabled",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.EventController",
+    "Method": "GetAllEvents",
+    "RelativePath": "Unitic/Event",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.EventController",
+    "Method": "AddEvent",
+    "RelativePath": "Unitic/Event",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "myEvent",
+        "Type": "WebTicket.Domain.Requests.EventRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.EventController",
+    "Method": "GetEventById",
+    "RelativePath": "Unitic/Event/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.EventController",
+    "Method": "UpdateEvent",
+    "RelativePath": "Unitic/Event/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "WebTicket.Domain.Requests.EventRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.EventController",
+    "Method": "CancelEvent",
+    "RelativePath": "Unitic/Event/Cancel/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.EventController",
+    "Method": "GetCancelledEvents",
+    "RelativePath": "Unitic/Event/Cancelled",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.EventController",
+    "Method": "CompleteEvent",
+    "RelativePath": "Unitic/Event/Complete/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.EventController",
+    "Method": "GetCompletedEvents",
+    "RelativePath": "Unitic/Event/Completed",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.EventController",
+    "Method": "GetPrivateEvents",
+    "RelativePath": "Unitic/Event/private",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.EventController",
+    "Method": "ProgressEvent",
+    "RelativePath": "Unitic/Event/Progress/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.EventController",
+    "Method": "PublishEvent",
+    "RelativePath": "Unitic/Event/Publish/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.EventController",
+    "Method": "GetPublishedEvents",
+    "RelativePath": "Unitic/Event/published",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WebTicket.API.Controller.UniversityController",
     "Method": "GetAllUniversities",
     "RelativePath": "Unitic/University",

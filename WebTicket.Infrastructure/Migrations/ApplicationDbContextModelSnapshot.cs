@@ -166,6 +166,23 @@ namespace WebTicket.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "User0001",
+                            RoleId = "000000000001"
+                        },
+                        new
+                        {
+                            UserId = "User0002",
+                            RoleId = "000000000002"
+                        },
+                        new
+                        {
+                            UserId = "User0003",
+                            RoleId = "000000000003"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -185,6 +202,85 @@ namespace WebTicket.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("WebTicket.Domain.Entities.Category", b =>
+                {
+                    b.Property<string>("CateID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("Is_Disable")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CateID");
+
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            CateID = "Cate0001",
+                            Is_Disable = false,
+                            Name = "Entertainment"
+                        },
+                        new
+                        {
+                            CateID = "Cate0002",
+                            Is_Disable = false,
+                            Name = "Education"
+                        },
+                        new
+                        {
+                            CateID = "Cate0003",
+                            Is_Disable = false,
+                            Name = "Sharing"
+                        },
+                        new
+                        {
+                            CateID = "Cate0004",
+                            Is_Disable = false,
+                            Name = "Music"
+                        });
+                });
+
+            modelBuilder.Entity("WebTicket.Domain.Entities.Event", b =>
+                {
+                    b.Property<string>("EventID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CateID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Date_End")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Date_Start")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("EventID");
+
+                    b.HasIndex("CateID");
+
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("WebTicket.Domain.Entities.University", b =>
@@ -308,6 +404,61 @@ namespace WebTicket.Infrastructure.Migrations
                     b.HasIndex("UniversityId");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "User0001",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "53a7889a-d428-454c-9a6e-6eee39908eda",
+                            Email = "caohoangnhat58@gmail.com",
+                            EmailConfirmed = false,
+                            FirstName = "Cao",
+                            LastName = "Hoàng Nhật",
+                            LockoutEnabled = false,
+                            Mssv = "",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJ5b1k2Z7a3z4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6A==",
+                            PhoneNumber = "01232302459",
+                            PhoneNumberConfirmed = false,
+                            TwoFactorEnabled = false,
+                            wallet = 0
+                        },
+                        new
+                        {
+                            Id = "User0002",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "279dd8e2-3f59-4a8e-9f04-79f7e71be73a",
+                            Email = "nhatchse184713@fpt.edu.vn",
+                            EmailConfirmed = false,
+                            FirstName = "Cao",
+                            LastName = "Hoàng Nhật",
+                            LockoutEnabled = false,
+                            Mssv = "",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJ5b1k2Z7a3z4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6A==",
+                            PhoneNumber = "01232302459",
+                            PhoneNumberConfirmed = false,
+                            TwoFactorEnabled = false,
+                            UniversityId = "Uni0001",
+                            wallet = 0
+                        },
+                        new
+                        {
+                            Id = "User0003",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "2ad8dd62-d07f-45fd-8a19-55eedc92de4e",
+                            Email = "nhatchse184714@fpt.edu.vn",
+                            EmailConfirmed = false,
+                            FirstName = "Cao",
+                            LastName = "Hoàng Nhật",
+                            LockoutEnabled = false,
+                            Mssv = "",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJ5b1k2Z7a3z4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6A==",
+                            PhoneNumber = "01232302459",
+                            PhoneNumberConfirmed = false,
+                            TwoFactorEnabled = false,
+                            UniversityId = "Uni0001",
+                            wallet = 0
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -361,6 +512,16 @@ namespace WebTicket.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("WebTicket.Domain.Entities.Event", b =>
+                {
+                    b.HasOne("WebTicket.Domain.Entities.Category", "Category")
+                        .WithMany("Events")
+                        .HasForeignKey("CateID")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("WebTicket.Domain.Entities.User", b =>
                 {
                     b.HasOne("WebTicket.Domain.Entities.University", "University")
@@ -369,6 +530,11 @@ namespace WebTicket.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("University");
+                });
+
+            modelBuilder.Entity("WebTicket.Domain.Entities.Category", b =>
+                {
+                    b.Navigation("Events");
                 });
 
             modelBuilder.Entity("WebTicket.Domain.Entities.University", b =>
