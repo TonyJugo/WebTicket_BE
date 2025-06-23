@@ -10,7 +10,10 @@ namespace WebTicket.Application.Abstracts
 {
     public interface IEventService
     {
+        Task SoldOutEventAsync(string id);
         Task<List<Event>> GetAllEvents();
+        Task<List<Event>> GetAllSoldOutEvents();
+        Task<List<Event>> GetAllInProgressEvents();
         Task<List<Event>> GetAllCompletedEvents();
         Task<List<Event>> GetAllCancelledEvents();
         Task<List<Event>> GetAllPublishedEvents();

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using WebTicket.Application.Abstracts;
@@ -20,6 +21,18 @@ namespace WebTicket.API.Controller
         public async Task<IActionResult> GetAllEvents()
         {
             var myEvents = await _myEventService.GetAllEvents();
+            return Ok(myEvents);
+        }
+        [HttpGet("sold-out")]
+        public async Task<IActionResult> GetSoldOutEvents()
+        {
+            var myEvents = await _myEventService.GetAllSoldOutEvents();
+            return Ok(myEvents);
+        }
+        [HttpGet("InProgress")]
+        public async Task<IActionResult> GetInProgressEvents()
+        {
+            var myEvents = await _myEventService.GetAllInProgressEvents();
             return Ok(myEvents);
         }
 
@@ -85,27 +98,38 @@ namespace WebTicket.API.Controller
         }
 
         [HttpPut("Cancel/{id}")]
+        [Authorize(Roles = "Admin,Moderator")]
         public async Task<IActionResult> CancelEvent(string id)
         {
             await _myEventService.CancelledEventAsync(id);
             return Ok("Event updated successfully");
         }
         [HttpPut("Publish/{id}")]
-        public async Task<IActionResult> PublishEvent(string id)
+        [Authorize(Roles = "Admin,Moderator")]
+        public async Task<IActionResult> PublishOrPrivateEvent(string id)
         {
             await _myEventService.PrivateOrPublishedEventAsync(id);
             return Ok("Event updated successfully");
         }
         [HttpPut("Progress/{id}")]
+        [Authorize(Roles = "Admin,Moderator")]
         public async Task<IActionResult> ProgressEvent(string id)
         {
             await _myEventService.InProgressEventAsync(id);
             return Ok("Event updated successfully");
         }
         [HttpPut("Complete/{id}")]
+        [Authorize(Roles = "Admin,Moderator,Organizer")]
         public async Task<IActionResult> CompleteEvent(string id)
         {
             await _myEventService.CompletedEventAsync(id);
+            return Ok("Event updated successfully");
+        }
+        [HttpPut("SoldOut/{id}")]
+        [Authorize(Roles = "Admin,Moderator")]
+        public async Task<IActionResult> SoldOutEvent(string id)
+        {
+            await _myEventService.SoldOutEventAsync(id);
             return Ok("Event updated successfully");
         }
     }

@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace WebTicket.Domain.Requests
 {
-    public record EventRequest(string Name, string Description, DateTime Date_Start, DateTime Date_End, int Price, string CategoryName);
+    public record EventRequest(string? Name, string? Description, string? Date_Start, string? Date_End, int? Price, string? CategoryName);
 }

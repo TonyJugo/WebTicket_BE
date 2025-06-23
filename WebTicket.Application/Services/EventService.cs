@@ -28,6 +28,14 @@ namespace WebTicket.Application.Services
         {
             return _repo.GetAllEventsAsync();
         }
+        public Task<List<Event>> GetAllSoldOutEvents()
+        {
+            return _repo.GetAllSoldOutEvent();
+        }
+        public Task<List<Event>> GetAllInProgressEvents()
+        {
+            return _repo.GetAllInProgressEvents();
+        }
         public Task<List<Event>> GetAllCompletedEvents()
         {
             return _repo.GetAllCompletedEvent();
@@ -69,8 +77,8 @@ namespace WebTicket.Application.Services
                 Name = myEventRequest.Name,
                 Status = GetStringEventStatusName(EventStatus.Private),
                 Description = myEventRequest.Description,
-                Date_Start = myEventRequest.Date_Start,
-                Date_End = myEventRequest.Date_End,
+                Date_Start = DateTime.Parse(myEventRequest.Date_Start),
+                Date_End = DateTime.Parse(myEventRequest.Date_End),
                 Price = myEventRequest.Price,
                 CateID = category.CateID
             };
@@ -116,8 +124,8 @@ namespace WebTicket.Application.Services
             var category = await _categoryRepo.GetCategoryByNameAsync(myEventRequest.CategoryName);
             myEvent.Name = myEventRequest.Name;
             myEvent.Description = myEventRequest.Description;
-            myEvent.Date_Start = myEventRequest.Date_Start;
-            myEvent.Date_End = myEventRequest.Date_End;
+            myEvent.Date_Start = DateTime.Parse(myEventRequest.Date_Start);
+            myEvent.Date_End = DateTime.Parse(myEventRequest.Date_End);
             myEvent.Price = myEventRequest.Price;
             myEvent.CateID = category.CateID;
 
@@ -144,7 +152,7 @@ namespace WebTicket.Application.Services
         {
             string lastId = await _repo.GetLastId();
             if (lastId == null) return "Event0001";
-            int id = int.Parse(lastId.Substring(4)) + 1; // lấy id cuối cùng và cộng thêm 1
+            int id = int.Parse(lastId.Substring(5)) + 1; // lấy id cuối cùng và cộng thêm 1
             string generatedId = "Event" + id.ToString("D4");
             return generatedId;
         }
@@ -216,6 +224,19 @@ namespace WebTicket.Application.Services
             }
             // Change the status of the myEvent to Completed
             myEvent.Status = GetStringEventStatusName(EventStatus.Completed);
+            await _repo.UpdateEventAsync(myEvent);
+        }
+        public async Task SoldOutEventAsync(string id)
+        {
+            // Retrieve the myEvent by ID
+            var myEvent = await _repo.GetEventByIdAsync(id);
+            if (myEvent == null)
+            {
+                throw new ObjectNotFoundException($"Event with id {id} not found.");
+            }
+
+            // Change the status of the myEvent to Completed
+            myEvent.Status = GetStringEventStatusName(EventStatus.SoldOut);
             await _repo.UpdateEventAsync(myEvent);
         }
 

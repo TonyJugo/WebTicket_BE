@@ -69,6 +69,27 @@
   },
   {
     "ContainingType": "WebTicket.API.Controller.AuthController",
+    "Method": "RegisterRoleAsync",
+    "RelativePath": "Unitic/Auth/register/{role}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "role",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "registerRequest",
+        "Type": "WebTicket.Domain.Requests.RegisterRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.AuthController",
     "Method": "resetPassword",
     "RelativePath": "Unitic/Auth/reset-password",
     "HttpMethod": "POST",
@@ -315,6 +336,16 @@
   },
   {
     "ContainingType": "WebTicket.API.Controller.EventController",
+    "Method": "GetInProgressEvents",
+    "RelativePath": "Unitic/Event/InProgress",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.EventController",
     "Method": "GetPrivateEvents",
     "RelativePath": "Unitic/Event/private",
     "HttpMethod": "GET",
@@ -341,7 +372,7 @@
   },
   {
     "ContainingType": "WebTicket.API.Controller.EventController",
-    "Method": "PublishEvent",
+    "Method": "PublishOrPrivateEvent",
     "RelativePath": "Unitic/Event/Publish/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -363,6 +394,32 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.EventController",
+    "Method": "GetSoldOutEvents",
+    "RelativePath": "Unitic/Event/sold-out",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.EventController",
+    "Method": "SoldOutEvent",
+    "RelativePath": "Unitic/Event/SoldOut/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {

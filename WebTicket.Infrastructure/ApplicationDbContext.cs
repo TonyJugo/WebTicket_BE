@@ -57,9 +57,9 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<string>
                 }
             });
         //seed data vào category
-         builder.Entity<Category>()
-            .HasData(new List<Category>
-            {
+        builder.Entity<Category>()
+           .HasData(new List<Category>
+           {
                 new Category
                 {
                     CateID = "Cate0001",
@@ -80,7 +80,7 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<string>
                     CateID = "Cate0004",
                     Name = "Music",
                 }
-            });
+           });
         //Seed data mặc định vào bảng asp.net role
         builder.Entity<IdentityRole<string>>()
             .HasData(new List<IdentityRole<string>>
@@ -120,67 +120,6 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<string>
                 }
 
             });
-        //Seed data moderator, organizer 
-        builder.Entity<User>()
-            .HasData(new List<User>
-            {
-                new User
-                {
-
-                    Id = "User0001",
-                    Mssv = string.Empty,
-                    Email = "caohoangnhat58@gmail.com",
-                    FirstName = "Cao",
-                    LastName = "Hoàng Nhật",
-                    PhoneNumber = "01232302459",
-                    UniversityId = null,
-                    PasswordHash = "AQAAAAEAACcQAAAAEJ5b1k2Z7a3z4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6A==", // Mã hóa mật khẩu
-                    //role
-                },
-                new User
-                {
-                    Id = "User0002",
-                    Mssv = string.Empty,
-                    Email = "nhatchse184713@fpt.edu.vn",
-                    FirstName = "Cao",
-                    LastName = "Hoàng Nhật",
-                    PhoneNumber = "01232302459",
-                    UniversityId = "Uni0001",
-                    PasswordHash = "AQAAAAEAACcQAAAAEJ5b1k2Z7a3z4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6A==", // Mã hóa mật khẩu
-                },
-                new User
-                {
-                    Id = "User0003",
-                    Mssv = string.Empty,
-                    Email = "nhatchse184714@fpt.edu.vn",
-                    FirstName = "Cao",
-                    LastName = "Hoàng Nhật",
-                    PhoneNumber = "01232302459",
-                    UniversityId = "Uni0001",
-                    PasswordHash = "AQAAAAEAACcQAAAAEJ5b1k2Z7a3z4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6A==", // Mã hóa mật khẩu
-                }
-            });
-        //seed user với role
-        builder.Entity<IdentityUserRole<string>>()
-           .HasData(new List<IdentityUserRole<string>>
-           {
-                new IdentityUserRole<string>()
-                {
-                    UserId = "User0001",
-                    RoleId = IdentityRoleConstants.AdminRoleString
-                },
-                new IdentityUserRole<string>()
-                {
-                    UserId = "User0002",
-                    RoleId = IdentityRoleConstants.ModeratorRoleString
-                },
-
-                new IdentityUserRole<string>()
-                {
-                    UserId = "User0003",
-                    RoleId = IdentityRoleConstants.OrganizerRoleString
-                },
-           });
 
         //các mqh
         builder.Entity<User>()

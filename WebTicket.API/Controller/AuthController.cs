@@ -141,7 +141,16 @@ namespace WebTicket.API.Controller
             return Ok("Password reset successfully");
         }
 
-
+        [HttpPost("register/{role}")]
+        public async Task<IActionResult> RegisterRoleAsync(string role, [FromBody] RegisterRequest registerRequest)
+        {
+            if (registerRequest == null)
+            {
+                return BadRequest("Invalid registration request.");
+            }
+            await _accountService.RegisterRoleAsync(role, registerRequest);
+            return Ok("Registration successful.");
+        }
 
     }
 

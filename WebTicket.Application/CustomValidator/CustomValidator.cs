@@ -177,40 +177,90 @@ public class CustomValidator
     }
     public (List<string>, bool) ValidateEventRequest(EventRequest eventRequest, List<string> categoryNames)
     {
-        //email, password ko cần check null
         var errors = new List<ErrorResponse>();
+
         //description
-        if(string.IsNullOrWhiteSpace(eventRequest.Description))
+        if (string.IsNullOrWhiteSpace(eventRequest.Description))
         {
             errors.Add(new ErrorResponse
             {
-                Description = "\nDescription can't be null"
+                Description = "\nDescription can't be null or empty"
             });
         }
         //eventDate
-        if (eventRequest.Date_Start == default || eventRequest.Date_End == default)
+        if (eventRequest.Date_Start == null)
         {
             errors.Add(new ErrorResponse
             {
-                Description = "\nStart date and end date can't be null"
+                Description = "\nStart date can't be null"
             });
         }
-        if (eventRequest.Date_Start < DateTime.Now)
+        if(eventRequest.Date_End == null)
+        {
+            errors.Add(new ErrorResponse
+            {
+                Description = "\nEnd date can't be null"
+            });
+        }
+
+        if (!string.IsNullOrWhiteSpace(eventRequest.Date_Start) &&
+            !Regex.IsMatch(eventRequest.Date_Start, @"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$"))
+        {
+            errors.Add(new ErrorResponse
+            {
+                Description = "\nStart date must be in the format yyyy-MM-ddTHH:mm:ss"
+            });
+        }
+
+        if (!string.IsNullOrWhiteSpace(eventRequest.Date_End) &&
+            !Regex.IsMatch(eventRequest.Date_End, @"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$"))
+        {
+            errors.Add(new ErrorResponse
+            {
+                Description = "\nEnd date must be in the format yyyy-MM-ddTHH:mm:ss"
+            });
+        }
+        bool dateStart = false, dateEnd = false;
+        DateTime Date_Start = DateTime.Now, Date_End = DateTime.Now;
+        if (!string.IsNullOrWhiteSpace(eventRequest.Date_Start))
+        { 
+           dateStart =  DateTime.TryParse(eventRequest.Date_Start, out Date_Start);
+        }
+        if (!string.IsNullOrWhiteSpace(eventRequest.Date_End))
+        {
+           dateEnd = DateTime.TryParse(eventRequest.Date_End, out Date_End);
+        }
+
+        if (dateStart && Date_Start < DateTime.Now)
         {
             errors.Add(new ErrorResponse
             {
                 Description = "\nStart date must be greater than current date"
             });
         }
-        if (eventRequest.Date_End < eventRequest.Date_Start)
+        if (dateEnd && Date_End < Date_Start)
         {
             errors.Add(new ErrorResponse
             {
                 Description = "\nEnd date must be greater than start date"
             });
         }
+        if (dateStart && dateEnd && Date_Start == Date_End)
+        {
+            errors.Add(new ErrorResponse
+            {
+                Description = "\nStart date must be different from end date"
+            });
+        }
 
         //event price
+        if (eventRequest.Price == null)
+        {
+            errors.Add(new ErrorResponse
+            {
+                Description = "\nPrice can't be null"
+            });
+        }
         if (eventRequest.Price < 0)
         {
             errors.Add(new ErrorResponse
@@ -218,13 +268,14 @@ public class CustomValidator
                 Description = "\nPrice must be greater than or equal to 0"
             });
         }
+
         //eventName
         if (string.IsNullOrWhiteSpace(eventRequest.Name))
         {
             errors.Add(new ErrorResponse
             {
 
-                Description = "\n event name can't be null"
+                Description = "\nEvent name can't be null or empty"
             });
         }
         bool a = false;

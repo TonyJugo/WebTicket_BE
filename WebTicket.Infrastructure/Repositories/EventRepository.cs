@@ -69,6 +69,13 @@ namespace WebTicket.Infrastructure.Repositories
             return await _context.Events
                 .FirstOrDefaultAsync(c => c.Name == name);
         }
-
+        public async Task<List<Event>> GetAllSoldOutEvent()
+        {
+            return await _context.Events.Where(u => u.Status == EventStatusConstant.SoldOut).ToListAsync();
+        }
+        public async Task<List<Event>> GetAllInProgressEvents()
+        {
+            return await _context.Events.Where(u => u.Status == EventStatusConstant.InProgress).ToListAsync();
+        }
     }
 }

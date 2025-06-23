@@ -233,7 +233,7 @@ namespace WebTicket.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "Mssv", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UniversityId", "UserName", "wallet" },
-                values: new object[] { "User0001", 0, "53a7889a-d428-454c-9a6e-6eee39908eda", "caohoangnhat58@gmail.com", false, "Cao", "Hoàng Nhật", false, null, "", null, null, "AQAAAAEAACcQAAAAEJ5b1k2Z7a3z4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6A==", "01232302459", false, null, false, null, null, 0 });
+                values: new object[] { "User0001", 0, "5d1ed5e0-4ba2-4f49-b47e-d2ad66d91e6b", "caohoangnhat58@gmail.com", false, "Cao", "Hoàng Nhật", false, null, "", null, null, "AQAAAAIAAYagAAAAEIAR83vONOjRdK8hppbXwYevTj+bbdVJuHkzp8NlA2QOgOCNh1xbyhkRZ/Ovy15C+w==", "01232302459", false, null, false, null, null, 0 });
 
             migrationBuilder.InsertData(
                 table: "Categories",
@@ -267,8 +267,8 @@ namespace WebTicket.Infrastructure.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "Mssv", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UniversityId", "UserName", "wallet" },
                 values: new object[,]
                 {
-                    { "User0002", 0, "279dd8e2-3f59-4a8e-9f04-79f7e71be73a", "nhatchse184713@fpt.edu.vn", false, "Cao", "Hoàng Nhật", false, null, "", null, null, "AQAAAAEAACcQAAAAEJ5b1k2Z7a3z4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6A==", "01232302459", false, null, false, "Uni0001", null, 0 },
-                    { "User0003", 0, "2ad8dd62-d07f-45fd-8a19-55eedc92de4e", "nhatchse184714@fpt.edu.vn", false, "Cao", "Hoàng Nhật", false, null, "", null, null, "AQAAAAEAACcQAAAAEJ5b1k2Z7a3z4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6A==", "01232302459", false, null, false, "Uni0001", null, 0 }
+                    { "User0002", 0, "2cc7d277-acd9-45b9-bf16-64e6c33b594a", "nhatchse184713@fpt.edu.vn", false, "Cao", "Hoàng Nhật", false, null, "", null, null, "AQAAAAIAAYagAAAAEIAR83vONOjRdK8hppbXwYevTj+bbdVJuHkzp8NlA2QOgOCNh1xbyhkRZ/Ovy15C+w==", "01232302459", false, null, false, "Uni0001", null, 0 },
+                    { "User0003", 0, "3187dd24-4af1-4728-a852-369264939264", "nhatchse184714@fpt.edu.vn", false, "Cao", "Hoàng Nhật", false, null, "", null, null, "AQAAAAIAAYagAAAAEIAR83vONOjRdK8hppbXwYevTj+bbdVJuHkzp8NlA2QOgOCNh1xbyhkRZ/Ovy15C+w==", "01232302459", false, null, false, "Uni0001", null, 0 }
                 });
 
             migrationBuilder.InsertData(
