@@ -78,12 +78,12 @@ namespace WebTicket.Infrastructure.Migrations
                 columns: table => new
                 {
                     EventID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Date_Start = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Date_End = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Price = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Date_Start = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Date_End = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Price = table.Column<int>(type: "int", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CateID = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -231,11 +231,6 @@ namespace WebTicket.Infrastructure.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "Mssv", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UniversityId", "UserName", "wallet" },
-                values: new object[] { "User0001", 0, "5d1ed5e0-4ba2-4f49-b47e-d2ad66d91e6b", "caohoangnhat58@gmail.com", false, "Cao", "Hoàng Nhật", false, null, "", null, null, "AQAAAAIAAYagAAAAEIAR83vONOjRdK8hppbXwYevTj+bbdVJuHkzp8NlA2QOgOCNh1xbyhkRZ/Ovy15C+w==", "01232302459", false, null, false, null, null, 0 });
-
-            migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "CateID", "Is_Disable", "Name" },
                 values: new object[,]
@@ -255,29 +250,6 @@ namespace WebTicket.Infrastructure.Migrations
                     { "Uni0002", "Đại học Bách Khoa" },
                     { "Uni0003", "Đại học Khoa Học Tự Nhiên" },
                     { "Uni0004", "Đại học Công Nghệ Thông Tin" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "AspNetUserRoles",
-                columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "000000000001", "User0001" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "Mssv", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UniversityId", "UserName", "wallet" },
-                values: new object[,]
-                {
-                    { "User0002", 0, "2cc7d277-acd9-45b9-bf16-64e6c33b594a", "nhatchse184713@fpt.edu.vn", false, "Cao", "Hoàng Nhật", false, null, "", null, null, "AQAAAAIAAYagAAAAEIAR83vONOjRdK8hppbXwYevTj+bbdVJuHkzp8NlA2QOgOCNh1xbyhkRZ/Ovy15C+w==", "01232302459", false, null, false, "Uni0001", null, 0 },
-                    { "User0003", 0, "3187dd24-4af1-4728-a852-369264939264", "nhatchse184714@fpt.edu.vn", false, "Cao", "Hoàng Nhật", false, null, "", null, null, "AQAAAAIAAYagAAAAEIAR83vONOjRdK8hppbXwYevTj+bbdVJuHkzp8NlA2QOgOCNh1xbyhkRZ/Ovy15C+w==", "01232302459", false, null, false, "Uni0001", null, 0 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "AspNetUserRoles",
-                columns: new[] { "RoleId", "UserId" },
-                values: new object[,]
-                {
-                    { "000000000002", "User0002" },
-                    { "000000000003", "User0003" }
                 });
 
             migrationBuilder.CreateIndex(

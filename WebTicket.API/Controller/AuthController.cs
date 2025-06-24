@@ -142,6 +142,8 @@ namespace WebTicket.API.Controller
         }
 
         [HttpPost("register/{role}")]
+        [Authorize(Roles = "Admin")]
+        //Only admin can register a new role
         public async Task<IActionResult> RegisterRoleAsync(string role, [FromBody] RegisterRequest registerRequest)
         {
             if (registerRequest == null)

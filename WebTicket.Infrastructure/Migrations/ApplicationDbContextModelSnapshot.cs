@@ -166,23 +166,6 @@ namespace WebTicket.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "User0001",
-                            RoleId = "000000000001"
-                        },
-                        new
-                        {
-                            UserId = "User0002",
-                            RoleId = "000000000002"
-                        },
-                        new
-                        {
-                            UserId = "User0003",
-                            RoleId = "000000000003"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -255,25 +238,22 @@ namespace WebTicket.Infrastructure.Migrations
                     b.Property<string>("CateID")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("Date_End")
+                    b.Property<DateTime?>("Date_End")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("Date_Start")
+                    b.Property<DateTime?>("Date_Start")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Price")
+                    b.Property<int?>("Price")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EventID");
@@ -404,61 +384,6 @@ namespace WebTicket.Infrastructure.Migrations
                     b.HasIndex("UniversityId");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "User0001",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "5d1ed5e0-4ba2-4f49-b47e-d2ad66d91e6b",
-                            Email = "caohoangnhat58@gmail.com",
-                            EmailConfirmed = false,
-                            FirstName = "Cao",
-                            LastName = "Hoàng Nhật",
-                            LockoutEnabled = false,
-                            Mssv = "",
-                            PasswordHash = "AQAAAAIAAYagAAAAEIAR83vONOjRdK8hppbXwYevTj+bbdVJuHkzp8NlA2QOgOCNh1xbyhkRZ/Ovy15C+w==",
-                            PhoneNumber = "01232302459",
-                            PhoneNumberConfirmed = false,
-                            TwoFactorEnabled = false,
-                            wallet = 0
-                        },
-                        new
-                        {
-                            Id = "User0002",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "2cc7d277-acd9-45b9-bf16-64e6c33b594a",
-                            Email = "nhatchse184713@fpt.edu.vn",
-                            EmailConfirmed = false,
-                            FirstName = "Cao",
-                            LastName = "Hoàng Nhật",
-                            LockoutEnabled = false,
-                            Mssv = "",
-                            PasswordHash = "AQAAAAIAAYagAAAAEIAR83vONOjRdK8hppbXwYevTj+bbdVJuHkzp8NlA2QOgOCNh1xbyhkRZ/Ovy15C+w==",
-                            PhoneNumber = "01232302459",
-                            PhoneNumberConfirmed = false,
-                            TwoFactorEnabled = false,
-                            UniversityId = "Uni0001",
-                            wallet = 0
-                        },
-                        new
-                        {
-                            Id = "User0003",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "3187dd24-4af1-4728-a852-369264939264",
-                            Email = "nhatchse184714@fpt.edu.vn",
-                            EmailConfirmed = false,
-                            FirstName = "Cao",
-                            LastName = "Hoàng Nhật",
-                            LockoutEnabled = false,
-                            Mssv = "",
-                            PasswordHash = "AQAAAAIAAYagAAAAEIAR83vONOjRdK8hppbXwYevTj+bbdVJuHkzp8NlA2QOgOCNh1xbyhkRZ/Ovy15C+w==",
-                            PhoneNumber = "01232302459",
-                            PhoneNumberConfirmed = false,
-                            TwoFactorEnabled = false,
-                            UniversityId = "Uni0001",
-                            wallet = 0
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

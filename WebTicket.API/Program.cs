@@ -15,6 +15,7 @@ using WebTicket.Infrastructure.Contracts;
 using WebTicket.Infrastructure.Options;
 using WebTicket.Infrastructure.Processors;
 using WebTicket.Infrastructure.Repositories;
+using WebTicket.Infrastructure.Seeder;
 
 namespace WebTicket.API
 {
@@ -149,6 +150,16 @@ namespace WebTicket.API
 
 
             var app = builder.Build();
+
+            //Tạo scope để chạy seeder khởi tạo data ban đầu sau đó dispose scope
+            //khởi tạo data mỗi khi chạy app
+            using (var scope = app.Services.CreateScope())
+            {
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+                //cách khác để chạy đồng bộ trong hàm không phải async
+                Seeder.SeedAdminDataAsync(userManager).GetAwaiter().GetResult();
+            }
+
 
             // Configure the HTTP request pipeline.
 
