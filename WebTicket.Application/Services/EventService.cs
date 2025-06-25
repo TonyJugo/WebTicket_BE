@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using WebTicket.Application.Abstracts;
@@ -17,11 +20,13 @@ namespace WebTicket.Application.Services
         private readonly IEventRepository _repo;
         private readonly CustomValidator _validator;
         private readonly ICategoryRepository _categoryRepo;
-        public EventService(IEventRepository repo, CustomValidator validator, ICategoryRepository categoryRepository)
+        private readonly IEventJobScheduler _scheduler;
+        public EventService(IEventRepository repo, CustomValidator validator, ICategoryRepository categoryRepository, IEventJobScheduler scheduler)
         {
             _validator = validator;
             _repo = repo;
             _categoryRepo = categoryRepository;
+            _scheduler = scheduler;
         }
 
         public Task<List<Event>> GetAllEvents()
@@ -120,7 +125,14 @@ namespace WebTicket.Application.Services
             {
                 throw new UpdateAddFailedException(errors);
             }
+            // Check if start time is changed
+            bool checkDate = true;
+            if(myEvent.Date_Start != DateTime.Parse(myEventRequest.Date_Start))
+            {
+                checkDate = false;
+            }
             // Update the myEvent properties
+            
             var category = await _categoryRepo.GetCategoryByNameAsync(myEventRequest.CategoryName);
             myEvent.Name = myEventRequest.Name;
             myEvent.Description = myEventRequest.Description;
@@ -131,22 +143,37 @@ namespace WebTicket.Application.Services
 
             // Update the myEvent in the repository
             await _repo.UpdateEventAsync(myEvent);
+
+            // if date start is changed, delete the job if it exists and create new job
+            if (myEvent.Status == "Published")
+            {
+                await _scheduler.DeleteStatusJobAsync(id);
+                await _scheduler.ScheduleUpdateStatusJobAsync(id, myEvent.Date_Start);
+            }
         }
-        public async Task CancelledEventAsync(string id)
+        public async Task UpdateEventStatusAsync(string id, EventUpdateStatusRequest eventUpdateStatus)
         {
-            // Retrieve the myEvent by ID
             var myEvent = await _repo.GetEventByIdAsync(id);
             if (myEvent == null)
             {
-                throw new ObjectNotFoundException($"Event with id {id} not found.");
+                throw new ObjectNotFoundException($"Event with id {id}");
             }
-            if (myEvent.Status != GetStringEventStatusName(EventStatus.Published))
+
+            var(error, isValidate) = _validator.ValidateEventStatus(eventUpdateStatus.status, myEvent);
+            if(!isValidate)
             {
-                throw new NotValidEventStatusException(GetStringEventStatusName(EventStatus.Published));
+                throw new UpdateAddFailedException(error);
             }
-            // cancel the myEvent
-            myEvent.Status = GetStringEventStatusName(EventStatus.Cancelled);
+            myEvent.Status = eventUpdateStatus.status;
             await _repo.UpdateEventAsync(myEvent);
+
+            //gọi scheduler tạo job nếu update lên published
+            if (eventUpdateStatus.status == EventStatusConstant.Published)
+                await _scheduler.ScheduleUpdateStatusJobAsync(id, myEvent.Date_Start);
+            //ko phải published thì xóa job
+            else 
+                await _scheduler.DeleteStatusJobAsync(id);
+
         }
         private async Task<string> GenerateEventId()
         {
@@ -169,76 +196,76 @@ namespace WebTicket.Application.Services
                 _ => throw new ArgumentOutOfRangeException(nameof(eventStatus), eventStatus, "Provided event status is not supported.")
             };
         }
-        public async Task PrivateOrPublishedEventAsync(string id)
-        {
-            // Retrieve the myEvent by ID
-            var myEvent = await _repo.GetEventByIdAsync(id);
-            // Check if the myEvent exists and its status is either Private or Published
-            if (myEvent == null)
-            {
-                throw new ObjectNotFoundException($"Event with id {id} not found.");
-            }
-            if (myEvent.Status != GetStringEventStatusName(EventStatus.Private) && myEvent.Status != GetStringEventStatusName(EventStatus.Published))
-            {
-                throw new NotValidEventStatusException($"{GetStringEventStatusName(EventStatus.Private)} or {GetStringEventStatusName(EventStatus.Published)}");
-            }
-            // Change the status of the myEvent to toggle between Private and Published
-            if (myEvent.Status == EventStatusConstant.Private)
-            {
-                myEvent.Status = EventStatusConstant.Published;
-            }
-            else if (myEvent.Status == EventStatusConstant.Published)
-            {
-                myEvent.Status = EventStatusConstant.Private;
-            }
+        //public async Task PrivateOrPublishedEventAsync(string id)
+        //{
+        //    // Retrieve the myEvent by ID
+        //    var myEvent = await _repo.GetEventByIdAsync(id);
+        //    // Check if the myEvent exists and its status is either Private or Published
+        //    if (myEvent == null)
+        //    {
+        //        throw new ObjectNotFoundException($"Event with id {id} not found.");
+        //    }
+        //    if (myEvent.Status != GetStringEventStatusName(EventStatus.Private) && myEvent.Status != GetStringEventStatusName(EventStatus.Published))
+        //    {
+        //        throw new NotValidEventStatusException($"{GetStringEventStatusName(EventStatus.Private)} or {GetStringEventStatusName(EventStatus.Published)}");
+        //    }
+        //    // Change the status of the myEvent to toggle between Private and Published
+        //    if (myEvent.Status == EventStatusConstant.Private)
+        //    {
+        //        myEvent.Status = EventStatusConstant.Published;
+        //    }
+        //    else if (myEvent.Status == EventStatusConstant.Published)
+        //    {
+        //        myEvent.Status = EventStatusConstant.Private;
+        //    }
         
-            await _repo.UpdateEventAsync(myEvent);
-        }
-        public async Task InProgressEventAsync(string id)
-        {
-            // Retrieve the myEvent by ID
-            var myEvent = await _repo.GetEventByIdAsync(id);
-            if (myEvent == null)
-            {
-                throw new ObjectNotFoundException($"Event with id {id} not found.");
-            }
-            if (myEvent.Status != GetStringEventStatusName(EventStatus.Published))
-            {
-                throw new NotValidEventStatusException(GetStringEventStatusName(EventStatus.Published));
-            }
-            // Change the status of the myEvent
-            myEvent.Status = GetStringEventStatusName(EventStatus.InProgress);
-            await _repo.UpdateEventAsync(myEvent);
-        }
-        public async Task CompletedEventAsync(string id)
-        {
-            // Retrieve the myEvent by ID
-            var myEvent = await _repo.GetEventByIdAsync(id);
-            if (myEvent == null)
-            {
-                throw new ObjectNotFoundException($"Event with id {id} not found.");
-            }
-            if (myEvent.Status != GetStringEventStatusName(EventStatus.InProgress))
-            {
-                throw new NotValidEventStatusException(GetStringEventStatusName(EventStatus.InProgress));
-            }
-            // Change the status of the myEvent to Completed
-            myEvent.Status = GetStringEventStatusName(EventStatus.Completed);
-            await _repo.UpdateEventAsync(myEvent);
-        }
-        public async Task SoldOutEventAsync(string id)
-        {
-            // Retrieve the myEvent by ID
-            var myEvent = await _repo.GetEventByIdAsync(id);
-            if (myEvent == null)
-            {
-                throw new ObjectNotFoundException($"Event with id {id} not found.");
-            }
+        //    await _repo.UpdateEventAsync(myEvent);
+        //}
+        //public async Task InProgressEventAsync(string id)
+        //{
+        //    // Retrieve the myEvent by ID
+        //    var myEvent = await _repo.GetEventByIdAsync(id);
+        //    if (myEvent == null)
+        //    {
+        //        throw new ObjectNotFoundException($"Event with id {id} not found.");
+        //    }
+        //    if (myEvent.Status != GetStringEventStatusName(EventStatus.Published))
+        //    {
+        //        throw new NotValidEventStatusException(GetStringEventStatusName(EventStatus.Published));
+        //    }
+        //    // Change the status of the myEvent
+        //    myEvent.Status = GetStringEventStatusName(EventStatus.InProgress);
+        //    await _repo.UpdateEventAsync(myEvent);
+        //}
+        //public async Task CompletedEventAsync(string id)
+        //{
+        //    // Retrieve the myEvent by ID
+        //    var myEvent = await _repo.GetEventByIdAsync(id);
+        //    if (myEvent == null)
+        //    {
+        //        throw new ObjectNotFoundException($"Event with id {id} not found.");
+        //    }
+        //    if (myEvent.Status != GetStringEventStatusName(EventStatus.InProgress))
+        //    {
+        //        throw new NotValidEventStatusException(GetStringEventStatusName(EventStatus.InProgress));
+        //    }
+        //    // Change the status of the myEvent to Completed
+        //    myEvent.Status = GetStringEventStatusName(EventStatus.Completed);
+        //    await _repo.UpdateEventAsync(myEvent);
+        //}
+        //public async Task SoldOutEventAsync(string id)
+        //{
+        //    // Retrieve the myEvent by ID
+        //    var myEvent = await _repo.GetEventByIdAsync(id);
+        //    if (myEvent == null)
+        //    {
+        //        throw new ObjectNotFoundException($"Event with id {id} not found.");
+        //    }
 
-            // Change the status of the myEvent to Completed
-            myEvent.Status = GetStringEventStatusName(EventStatus.SoldOut);
-            await _repo.UpdateEventAsync(myEvent);
-        }
+        //    // Change the status of the myEvent to Completed
+        //    myEvent.Status = GetStringEventStatusName(EventStatus.SoldOut);
+        //    await _repo.UpdateEventAsync(myEvent);
+        //}
 
 
     }

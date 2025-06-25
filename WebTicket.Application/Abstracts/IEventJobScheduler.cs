@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WebTicket.Domain.Entities;
 
 namespace WebTicket.Application.Abstracts
 {
-    public interface IBackGroundJobScheduler
+    public interface IEventJobScheduler
     {
-        void ScheduleInProgressEvent(Event myEvent, TimeSpan delay);
+        Task ScheduleUpdateStatusJobAsync(string eventId, DateTime? startDate);
+        Task DeleteStatusJobAsync(string eventId);
     }
 }

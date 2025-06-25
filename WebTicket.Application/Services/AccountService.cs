@@ -60,7 +60,6 @@ public class AccountService : IAccountService
          await _userManager.CreateAsync(user);
         //gán user với role vào bảng ASpNetUserRoles
         var addRoleResult = await _userManager.AddToRoleAsync(user, GetStringIdentityRoleName(Role.User));
-        await _userManager.UpdateAsync(user); //cập nhật user sau khi thêm role
     }
     public async Task RegisterRoleAsync(string role, RegisterRequest registerRequest)
     {
@@ -101,7 +100,6 @@ public class AccountService : IAccountService
         await _userManager.CreateAsync(user);
         //gán user với role vào bảng ASpNetUserRoles
         var addRoleResult = await _userManager.AddToRoleAsync(user, role);
-        await _userManager.UpdateAsync(user); //cập nhật user sau khi thêm role
     }
 
     public async Task<string> LoginAsync(LoginRequest loginRequest)
@@ -139,7 +137,6 @@ public class AccountService : IAccountService
                 string.Empty, null); // Assuming default university for Google users
             var result = await _userManager.CreateAsync(user);
             var addRoleResult = await _userManager.AddToRoleAsync(user, GetStringIdentityRoleName(Role.User));
-            await _userManager.UpdateAsync(user); //cập nhật user sau khi thêm role
         }
         //tạo token đăng nhập
         IList<string> roles = await _userManager.GetRolesAsync(user);

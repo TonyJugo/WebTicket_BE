@@ -22,23 +22,22 @@ namespace WebTicket.Infrastructure.Seeder
                 return;
             }
             //tài khoản admin
-            var user = User.Create("User0001", string.Empty, "caohoangnhat58@gmail.com", "Tony", "Jugo", "0768608545", "Uni0001");
-            user.PasswordHash = userManager.PasswordHasher.HashPassword(user, "12345678"); 
-            await userManager.CreateAsync(user);
-            var addRoleResult = await userManager.AddToRoleAsync(user, "Admin");
-            await userManager.UpdateAsync(user);
+            var admin = User.Create("User0001", string.Empty, "caohoangnhat58@gmail.com", "Tony", "Jugo", "0768608545", "Uni0001");
+            admin.PasswordHash = userManager.PasswordHasher.HashPassword(admin, "12345678"); 
+            //create query user trên normalizedname trùng thì ném exception
+            //sau đó insert data user vào db
+            await userManager.CreateAsync(admin);
+            var addRoleResult = await userManager.AddToRoleAsync(admin, "Admin");
             //tài khoản moderator
-            var user2 = User.Create("User0002", string.Empty, "caohoangnhat59@gmail.com", "Tony", "Jugo", "0768608545", "Uni0001");
-            user.PasswordHash = userManager.PasswordHasher.HashPassword(user, "12345678");
-            await userManager.CreateAsync(user2);
-            var addRoleResult2 = await userManager.AddToRoleAsync(user, "Moderator");
-            await userManager.UpdateAsync(user2);
+            var moderator = User.Create("User0002", string.Empty, "caohoangnhat59@gmail.com", "Tony", "Jugo", "0768608545", "Uni0001");
+            moderator.PasswordHash = userManager.PasswordHasher.HashPassword(moderator, "12345678");
+            await userManager.CreateAsync(moderator);
+            var addRoleResult2 = await userManager.AddToRoleAsync(moderator, "Moderator");
             //tài khoản organizer
-            var user3 = User.Create("User0003", string.Empty, "caohoangnhat60@gmail.com", "Tony", "Jugo", "0768608545", "Uni0001");
-            user.PasswordHash = userManager.PasswordHasher.HashPassword(user, "12345678");
-            await userManager.CreateAsync(user3);
-            var addRoleResult3 = await userManager.AddToRoleAsync(user, "Moderator");
-            await userManager.UpdateAsync(user3);
+            var organizer = User.Create("User0003", string.Empty, "caohoangnhat60@gmail.com", "Tony", "Jugo", "0768608545", "Uni0001");
+            organizer.PasswordHash = userManager.PasswordHasher.HashPassword(organizer, "12345678");
+            await userManager.CreateAsync(organizer);
+            var addRoleResult3 = await userManager.AddToRoleAsync(organizer, "Organizer");
 
         }
     }

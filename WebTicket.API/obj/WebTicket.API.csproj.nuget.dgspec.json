@@ -61,14 +61,6 @@
               "target": "Package",
               "version": "[1.70.0, )"
             },
-            "Hangfire": {
-              "target": "Package",
-              "version": "[1.8.20, )"
-            },
-            "Hangfire.AspNetCore": {
-              "target": "Package",
-              "version": "[1.8.20, )"
-            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[9.0.6, )"
@@ -82,6 +74,22 @@
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[9.0.6, )"
+            },
+            "Quartz": {
+              "target": "Package",
+              "version": "[3.14.0, )"
+            },
+            "Quartz.Extensions.DependencyInjection": {
+              "target": "Package",
+              "version": "[3.14.0, )"
+            },
+            "Quartz.Extensions.Hosting": {
+              "target": "Package",
+              "version": "[3.14.0, )"
+            },
+            "Quartz.Serialization.Json": {
+              "target": "Package",
+              "version": "[3.14.0, )"
             }
           },
           "imports": [
@@ -300,10 +308,6 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
-            "Hangfire.Core": {
-              "target": "Package",
-              "version": "[1.8.20, )"
-            },
             "Microsoft.AspNetCore.Http.Abstractions": {
               "target": "Package",
               "version": "[2.3.0, )"
@@ -323,6 +327,10 @@
             "Microsoft.IdentityModel.Tokens": {
               "target": "Package",
               "version": "[8.12.0, )"
+            },
+            "Quartz": {
+              "target": "Package",
+              "version": "[3.14.0, )"
             },
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",

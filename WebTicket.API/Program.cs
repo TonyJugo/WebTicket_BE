@@ -1,9 +1,11 @@
-﻿using Hangfire;
+﻿using Azure.Core.Serialization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Quartz;
+using Quartz.Spi;
 using System.Text;
 using WebTicket.API.Handlers;
 using WebTicket.Application.Abstracts;
@@ -14,6 +16,8 @@ using WebTicket.Infrastructure;
 using WebTicket.Infrastructure.Contracts;
 using WebTicket.Infrastructure.Options;
 using WebTicket.Infrastructure.Processors;
+using WebTicket.Infrastructure.QuartzJob;
+using WebTicket.Infrastructure.QuartzScheduler;
 using WebTicket.Infrastructure.Repositories;
 using WebTicket.Infrastructure.Seeder;
 
@@ -40,16 +44,30 @@ namespace WebTicket.API
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IEventRepository, EventRepository>();
             builder.Services.AddScoped<IEventService, EventService>();
-            //add hang fire
-            //lưu job vào db, nếu xài cách khác job tự động xóa khi tắt app / app crash => mất job
-            builder.Services.AddHangfire(config =>
-            {
-                config.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"));
-            });
-            builder.Services.AddHangfireServer(); //add hangfire server để chạy job
+
             builder.Services.AddScoped<IEventRepository, EventRepository>();
 
-          
+            //add quartz job DI
+            builder.Services.AddScoped<IEventJobScheduler, QuartzEventJobScheduler>();
+            builder.Services.AddScoped<UpdateEventStatusJob>();
+
+            //Add Quartz
+            builder.Services.AddQuartz(opt =>
+            {
+             
+                opt.UsePersistentStore(s =>
+                {
+                    s.UseProperties = true; //cho phép sử dụng properties
+                    s.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                    s.UseNewtonsoftJsonSerializer(); //sử dụng Newtonsoft.Json để serialize/deserialize job data
+                });
+            });
+            // Add the Quartz.NET hosted service
+            builder.Services.AddQuartzHostedService(q =>
+            {
+                q.WaitForJobsToComplete = true; 
+            });
+
             //add memory cache
             builder.Services.AddMemoryCache();
 
@@ -75,6 +93,7 @@ namespace WebTicket.API
             builder.Services.AddDbContext<ApplicationDbContext>(opt =>
             {
                 opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                opt.EnableSensitiveDataLogging(); //cho phép ghi log dữ liệu nhạy cảm, chỉ dùng trong môi trường dev
             });
 
 
@@ -166,7 +185,6 @@ namespace WebTicket.API
 
             app.UseHttpsRedirection(); //chuyển hướng http tới https
 
-            app.UseHangfireDashboard("/hangfire"); // dashboard hangfire
 
             app.UseExceptionHandler();
 

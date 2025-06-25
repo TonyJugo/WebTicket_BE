@@ -10,14 +10,16 @@
 
   <ItemGroup>
     <PackageReference Include="Google.Apis.Auth.AspNetCore3" Version="1.70.0" />
-    <PackageReference Include="Hangfire" Version="1.8.20" />
-    <PackageReference Include="Hangfire.AspNetCore" Version="1.8.20" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.6">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.6" />
+    <PackageReference Include="Quartz" Version="3.14.0" />
+    <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.14.0" />
+    <PackageReference Include="Quartz.Extensions.Hosting" Version="3.14.0" />
+    <PackageReference Include="Quartz.Serialization.Json" Version="3.14.0" />
   </ItemGroup>
 
   <ItemGroup>

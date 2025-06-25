@@ -197,10 +197,6 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
-            "Hangfire.Core": {
-              "target": "Package",
-              "version": "[1.8.20, )"
-            },
             "Microsoft.AspNetCore.Http.Abstractions": {
               "target": "Package",
               "version": "[2.3.0, )"
@@ -220,6 +216,10 @@
             "Microsoft.IdentityModel.Tokens": {
               "target": "Package",
               "version": "[8.12.0, )"
+            },
+            "Quartz": {
+              "target": "Package",
+              "version": "[3.14.0, )"
             },
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",

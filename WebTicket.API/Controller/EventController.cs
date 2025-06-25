@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-
+using System.Security.Claims;
 using WebTicket.Application.Abstracts;
+using WebTicket.Domain.Constants;
 using WebTicket.Domain.Requests;
 
 namespace WebTicket.API.Controller
@@ -97,40 +99,17 @@ namespace WebTicket.API.Controller
             return Ok("Event updated successfully");
         }
 
-        [HttpPut("Cancel/{id}")]
-        [Authorize(Roles = "Admin,Moderator")]
-        public async Task<IActionResult> CancelEvent(string id)
-        {
-            await _myEventService.CancelledEventAsync(id);
-            return Ok("Event updated successfully");
-        }
-        [HttpPut("Publish/{id}")]
-        [Authorize(Roles = "Admin,Moderator")]
-        public async Task<IActionResult> PublishOrPrivateEvent(string id)
-        {
-            await _myEventService.PrivateOrPublishedEventAsync(id);
-            return Ok("Event updated successfully");
-        }
-        [HttpPut("Progress/{id}")]
-        [Authorize(Roles = "Admin,Moderator")]
-        public async Task<IActionResult> ProgressEvent(string id)
-        {
-            await _myEventService.InProgressEventAsync(id);
-            return Ok("Event updated successfully");
-        }
-        [HttpPut("Complete/{id}")]
+        [HttpPut("status/{id}")]
         [Authorize(Roles = "Admin,Moderator,Organizer")]
-        public async Task<IActionResult> CompleteEvent(string id)
+        public async Task<IActionResult> UpdateEventStatus(string id, EventUpdateStatusRequest eventUpdateStatusRequest)
         {
-            await _myEventService.CompletedEventAsync(id);
-            return Ok("Event updated successfully");
-        }
-        [HttpPut("SoldOut/{id}")]
-        [Authorize(Roles = "Admin,Moderator")]
-        public async Task<IActionResult> SoldOutEvent(string id)
-        {
-            await _myEventService.SoldOutEventAsync(id);
-            return Ok("Event updated successfully");
+            var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (eventUpdateStatusRequest.status != EventStatusConstant.Completed && userRole == IdentityRoleConstants.Organizer)
+            {
+                return Unauthorized("Organizer can only update event status to Completed.");
+            }
+            await _myEventService.UpdateEventStatusAsync(id, eventUpdateStatusRequest);
+            return Ok("Event status updated successfully");
         }
     }
 }

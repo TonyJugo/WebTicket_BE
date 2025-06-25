@@ -284,44 +284,12 @@
   },
   {
     "ContainingType": "WebTicket.API.Controller.EventController",
-    "Method": "CancelEvent",
-    "RelativePath": "Unitic/Event/Cancel/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WebTicket.API.Controller.EventController",
     "Method": "GetCancelledEvents",
     "RelativePath": "Unitic/Event/Cancelled",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WebTicket.API.Controller.EventController",
-    "Method": "CompleteEvent",
-    "RelativePath": "Unitic/Event/Complete/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
     "ReturnTypes": []
   },
   {
@@ -356,38 +324,6 @@
   },
   {
     "ContainingType": "WebTicket.API.Controller.EventController",
-    "Method": "ProgressEvent",
-    "RelativePath": "Unitic/Event/Progress/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WebTicket.API.Controller.EventController",
-    "Method": "PublishOrPrivateEvent",
-    "RelativePath": "Unitic/Event/Publish/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WebTicket.API.Controller.EventController",
     "Method": "GetPublishedEvents",
     "RelativePath": "Unitic/Event/published",
     "HttpMethod": "GET",
@@ -408,8 +344,8 @@
   },
   {
     "ContainingType": "WebTicket.API.Controller.EventController",
-    "Method": "SoldOutEvent",
-    "RelativePath": "Unitic/Event/SoldOut/{id}",
+    "Method": "UpdateEventStatus",
+    "RelativePath": "Unitic/Event/status/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -417,6 +353,11 @@
       {
         "Name": "id",
         "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "eventUpdateStatusRequest",
+        "Type": "WebTicket.Domain.Requests.EventUpdateStatusRequest",
         "IsRequired": true
       }
     ],

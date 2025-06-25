@@ -12,7 +12,7 @@ using WebTicket.Infrastructure;
 namespace WebTicket.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250624151443_Init")]
+    [Migration("20250625131540_Init")]
     partial class Init
     {
         /// <inheritdoc />
