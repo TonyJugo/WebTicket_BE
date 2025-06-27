@@ -356,4 +356,8 @@ D:\ASP.Net\WebTicket_BE\WebTicket.API\obj\Debug\net9.0\refint\WebTicket.API.dll
 D:\ASP.Net\WebTicket_BE\WebTicket.API\obj\Debug\net9.0\WebTicket.API.pdb
 D:\ASP.Net\WebTicket_BE\WebTicket.API\obj\Debug\net9.0\WebTicket.API.genruntimeconfig.cache
 D:\ASP.Net\WebTicket_BE\WebTicket.API\obj\Debug\net9.0\ref\WebTicket.API.dll
+D:\ASP.Net\WebTicket_BE\WebTicket.API\bin\Debug\net9.0\Quartz.dll
+D:\ASP.Net\WebTicket_BE\WebTicket.API\bin\Debug\net9.0\Quartz.Extensions.DependencyInjection.dll
+D:\ASP.Net\WebTicket_BE\WebTicket.API\bin\Debug\net9.0\Quartz.Extensions.Hosting.dll
+D:\ASP.Net\WebTicket_BE\WebTicket.API\bin\Debug\net9.0\Quartz.Serialization.Json.dll
 D:\ASP.Net\WebTicket_BE\WebTicket.API\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

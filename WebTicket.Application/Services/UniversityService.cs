@@ -80,7 +80,7 @@ namespace WebTicket.Application.Services
             //check universityName đó đã tồn tại chưa
             var universityExists = await _universityRepo.GetUniversityByName(university.Name);
             
-            if (universityExists != null)
+            if (universityExists != null && universityExists.Id != universityId.Id)
             {
                 throw new UniversityNameAlreadyExistsException(university.Name);
             }
@@ -96,7 +96,7 @@ namespace WebTicket.Application.Services
         {
             string lastId = await _universityRepo.GetLastId();
             if (lastId == null) return "Uni0001";
-            int id = int.Parse(lastId.Substring(4)) + 1; // lấy id cuối cùng và cộng thêm 1
+            int id = int.Parse(lastId.Substring(3)) + 1; // lấy id cuối cùng và cộng thêm 1
             string generatedId = "Uni" + id.ToString("D4"); //D4 là tự động fill hết 4 số
             return generatedId;
         }

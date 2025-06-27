@@ -13,4 +13,5 @@ public interface IAccountService
     Task<SendEmailRequest> CreateOtp(string email);
     Task<(bool, string)> VerifyOtp(string email, string otp);
     Task ChangePassword(string userId, string newPassword);
+    Task RegisterRoleAsync(string role, RegisterRequest registerRequest);
 }

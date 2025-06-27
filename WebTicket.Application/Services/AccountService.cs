@@ -60,7 +60,46 @@ public class AccountService : IAccountService
          await _userManager.CreateAsync(user);
         //gán user với role vào bảng ASpNetUserRoles
         var addRoleResult = await _userManager.AddToRoleAsync(user, GetStringIdentityRoleName(Role.User));
-        await _userManager.UpdateAsync(user); //cập nhật user sau khi thêm role
+    }
+    public async Task RegisterRoleAsync(string role, RegisterRequest registerRequest)
+    {
+        //trim all
+        StringTrimmerExtension.TrimAllString(registerRequest);
+        //check xem user đã tồn tại chưa
+        var userExists = await _userManager.FindByEmailAsync(registerRequest.Email) != null;
+
+        if (userExists)
+        {
+            throw new UserAlreadyExistsException(email: registerRequest.Email);
+        }
+        //check xem role hợp lệ ko
+        if (!Enum.TryParse(role, false, out Role parsedRole))
+        {
+            throw new RegistrationFailedException(new List<string>
+            {
+                $"\nRole '{role}' is not a valid role.",
+                "\nValid roles are: Admin, Moderator, Staff, Organizer, User."
+            });
+        }
+        //validate registerRequest
+        List<string> universityNames = await _universityService.GetAllUniversityNames();
+        var (erros, isValid) = _validator.ValidateUser(registerRequest, universityNames);
+        // nếu không thành công do validate thì ném ra exception
+        if (!isValid)
+        {
+            throw new RegistrationFailedException(erros);
+        }
+        //tìm university và tạo id user
+
+        var universityId = await _userRepository.GetUniversityIdByNameAsync(registerRequest.UniversityName);
+        string id = await GenerateUserId();
+        //tạo user mới
+        var user = User.Create(id, registerRequest.Mssv, registerRequest.Email, registerRequest.FirstName, registerRequest.LastName, registerRequest.PhoneNumber, universityId);
+        user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, registerRequest.Password); //hash password trước khi lưu vào bảng AspNetUsers
+                                                                                                      //gọi hàm CreateAsync để vừa check validate vừa lưu vào bảng AspNetUsers
+        await _userManager.CreateAsync(user);
+        //gán user với role vào bảng ASpNetUserRoles
+        var addRoleResult = await _userManager.AddToRoleAsync(user, role);
     }
 
     public async Task<string> LoginAsync(LoginRequest loginRequest)
@@ -98,7 +137,6 @@ public class AccountService : IAccountService
                 string.Empty, null); // Assuming default university for Google users
             var result = await _userManager.CreateAsync(user);
             var addRoleResult = await _userManager.AddToRoleAsync(user, GetStringIdentityRoleName(Role.User));
-            await _userManager.UpdateAsync(user); //cập nhật user sau khi thêm role
         }
         //tạo token đăng nhập
         IList<string> roles = await _userManager.GetRolesAsync(user);

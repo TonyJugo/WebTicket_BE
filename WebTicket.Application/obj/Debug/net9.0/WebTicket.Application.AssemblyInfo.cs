@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WebTicket.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+78edac1c49cf90ace5ce3a81f3e0ad037acdb2c1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2fbdbe1d7315fe641d10be4a7385e58e3565038b")]
 [assembly: System.Reflection.AssemblyProductAttribute("WebTicket.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WebTicket.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Azure.Core.Serialization;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Quartz;
+using Quartz.Spi;
 using System.Text;
 using WebTicket.API.Handlers;
 using WebTicket.Application.Abstracts;
@@ -13,7 +16,10 @@ using WebTicket.Infrastructure;
 using WebTicket.Infrastructure.Contracts;
 using WebTicket.Infrastructure.Options;
 using WebTicket.Infrastructure.Processors;
+using WebTicket.Infrastructure.QuartzJob;
+using WebTicket.Infrastructure.QuartzScheduler;
 using WebTicket.Infrastructure.Repositories;
+using WebTicket.Infrastructure.Seeder;
 
 namespace WebTicket.API
 {
@@ -34,6 +40,33 @@ namespace WebTicket.API
             builder.Services.AddScoped<IUniversityRepository, UniversityRepository>();
             builder.Services.AddScoped<IUniversityService, UniversityService>();
             builder.Services.AddScoped<IMailService, GmailService>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IEventRepository, EventRepository>();
+            builder.Services.AddScoped<IEventService, EventService>();
+
+            builder.Services.AddScoped<IEventRepository, EventRepository>();
+
+            //add quartz job DI
+            builder.Services.AddScoped<IEventJobScheduler, QuartzEventJobScheduler>();
+            builder.Services.AddScoped<UpdateEventStatusJob>();
+
+            //Add Quartz
+            builder.Services.AddQuartz(opt =>
+            {
+             
+                opt.UsePersistentStore(s =>
+                {
+                    s.UseProperties = true; //cho phép sử dụng properties
+                    s.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                    s.UseNewtonsoftJsonSerializer(); //sử dụng Newtonsoft.Json để serialize/deserialize job data
+                });
+            });
+            // Add the Quartz.NET hosted service
+            builder.Services.AddQuartzHostedService(q =>
+            {
+                q.WaitForJobsToComplete = true; 
+            });
 
             //add memory cache
             builder.Services.AddMemoryCache();
@@ -60,6 +93,7 @@ namespace WebTicket.API
             builder.Services.AddDbContext<ApplicationDbContext>(opt =>
             {
                 opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                opt.EnableSensitiveDataLogging(); //cho phép ghi log dữ liệu nhạy cảm, chỉ dùng trong môi trường dev
             });
 
 
@@ -136,10 +170,22 @@ namespace WebTicket.API
 
             var app = builder.Build();
 
+            //Tạo scope để chạy seeder khởi tạo data ban đầu sau đó dispose scope
+            //khởi tạo data mỗi khi chạy app
+            using (var scope = app.Services.CreateScope())
+            {
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+                //cách khác để chạy đồng bộ trong hàm không phải async
+                Seeder.SeedAdminDataAsync(userManager).GetAwaiter().GetResult();
+            }
+
+
             // Configure the HTTP request pipeline.
 
 
             app.UseHttpsRedirection(); //chuyển hướng http tới https
+
+
             app.UseExceptionHandler();
 
             app.UseAuthentication();

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "1ARd6zY5VFU=",
+  "dgSpecHash": "wh77CMRw62o=",
   "success": true,
   "projectFilePath": "D:\\ASP.Net\\WebTicket_BE\\WebTicket.Infrastructure\\WebTicket.Infrastructure.csproj",
   "expectedPackageFiles": [
@@ -40,6 +40,7 @@
     "C:\\Users\\caoho\\.nuget\\packages\\microsoft.identitymodel.tokens\\8.12.0\\microsoft.identitymodel.tokens.8.12.0.nupkg.sha512",
     "C:\\Users\\caoho\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
     "C:\\Users\\caoho\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
+    "C:\\Users\\caoho\\.nuget\\packages\\quartz\\3.14.0\\quartz.3.14.0.nupkg.sha512",
     "C:\\Users\\caoho\\.nuget\\packages\\system.clientmodel\\1.0.0\\system.clientmodel.1.0.0.nupkg.sha512",
     "C:\\Users\\caoho\\.nuget\\packages\\system.configuration.configurationmanager\\6.0.1\\system.configuration.configurationmanager.6.0.1.nupkg.sha512",
     "C:\\Users\\caoho\\.nuget\\packages\\system.diagnostics.diagnosticsource\\6.0.1\\system.diagnostics.diagnosticsource.6.0.1.nupkg.sha512",

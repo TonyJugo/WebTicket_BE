@@ -14,19 +14,23 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<string>
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
-    
+
     public DbSet<User> Users { get; set; }
     public DbSet<University> Universities { get; set; }
+    public DbSet<Event> Events { get; set; }
+    public DbSet<Category> Categories { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        //000000000001
         base.OnModelCreating(builder);
 
         //quy định độ dài của các trường trong bảng User
         builder.Entity<User>()
             .Property(u => u.FirstName).HasMaxLength(256);
-        
+
         builder.Entity<User>()
             .Property(u => u.LastName).HasMaxLength(256);
+
         //Seed data mặc định vào bảng university
         builder.Entity<University>()
             .HasData(new List<University>
@@ -52,7 +56,31 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<string>
                     Name = "Đại học Công Nghệ Thông Tin",
                 }
             });
-
+        //seed data vào category
+        builder.Entity<Category>()
+           .HasData(new List<Category>
+           {
+                new Category
+                {
+                    CateID = "Cate0001",
+                    Name = "Entertainment",
+                },
+                new Category
+                {
+                    CateID = "Cate0002",
+                    Name = "Education",
+                },
+                new Category
+                {
+                    CateID = "Cate0003",
+                    Name = "Sharing",
+                },
+                new Category
+                {
+                    CateID = "Cate0004",
+                    Name = "Music",
+                }
+           });
         //Seed data mặc định vào bảng asp.net role
         builder.Entity<IdentityRole<string>>()
             .HasData(new List<IdentityRole<string>>
@@ -92,12 +120,18 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<string>
                 }
 
             });
+
+        //các mqh
         builder.Entity<User>()
             .HasOne(u => u.University)
             .WithMany(u => u.Users)
             .HasForeignKey(u => u.UniversityId)
-            .OnDelete(DeleteBehavior.SetNull); 
-
+            .OnDelete(DeleteBehavior.SetNull);
+        builder.Entity<Event>()
+            .HasOne(e => e.Category)
+            .WithMany(u => u.Events)
+            .HasForeignKey(e => e.CateID)
+            .OnDelete(DeleteBehavior.SetNull); // Xóa sự kiện khi người tổ chức bị xóa
 
     }
 }

@@ -10,6 +10,7 @@ using System.ComponentModel;
 using WebTicket.Application.Abstracts;
 using Microsoft.Win32;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using WebTicket.Domain.Constants;
 
 public class CustomValidator
 {
@@ -112,13 +113,13 @@ public class CustomValidator
             });
         }
 
-        //UniversityId
+        //UniversityName
         if (string.IsNullOrWhiteSpace(register.UniversityName))
         {
             errors.Add(new ErrorResponse
             {
 
-                Description = "\nUniversity ID can't be null"
+                Description = "\nUniversity Name can't be null"
             });
         }
         bool a = false;
@@ -175,4 +176,207 @@ public class CustomValidator
         }
         return errors.Any() ? (errors.Select(e => e.Description).ToList(), false) : (new List<string>(), true);
     }
+    public (List<string>, bool) ValidateEventRequest(EventRequest eventRequest, List<string> categoryNames)
+    {
+        var errors = new List<ErrorResponse>();
+
+        //description
+        if (string.IsNullOrWhiteSpace(eventRequest.Description))
+        {
+            errors.Add(new ErrorResponse
+            {
+                Description = "\nDescription can't be null or empty"
+            });
+        }
+        //eventDate
+        if (eventRequest.Date_Start == null)
+        {
+            errors.Add(new ErrorResponse
+            {
+                Description = "\nStart date can't be null"
+            });
+        }
+        if(eventRequest.Date_End == null)
+        {
+            errors.Add(new ErrorResponse
+            {
+                Description = "\nEnd date can't be null"
+            });
+        }
+
+        if (!string.IsNullOrWhiteSpace(eventRequest.Date_Start) &&
+            !Regex.IsMatch(eventRequest.Date_Start, @"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$"))
+        {
+            errors.Add(new ErrorResponse
+            {
+                Description = "\nStart date must be in the format yyyy-MM-ddTHH:mm:ss"
+            });
+        }
+
+        if (!string.IsNullOrWhiteSpace(eventRequest.Date_End) &&
+            !Regex.IsMatch(eventRequest.Date_End, @"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$"))
+        {
+            errors.Add(new ErrorResponse
+            {
+                Description = "\nEnd date must be in the format yyyy-MM-ddTHH:mm:ss"
+            });
+        }
+        bool dateStart = false, dateEnd = false;
+        DateTime Date_Start = DateTime.Now, Date_End = DateTime.Now;
+        if (!string.IsNullOrWhiteSpace(eventRequest.Date_Start))
+        { 
+           dateStart =  DateTime.TryParse(eventRequest.Date_Start, out Date_Start);
+        }
+        if (!string.IsNullOrWhiteSpace(eventRequest.Date_End))
+        {
+           dateEnd = DateTime.TryParse(eventRequest.Date_End, out Date_End);
+        }
+
+        if (dateStart && Date_Start < DateTime.Now)
+        {
+            errors.Add(new ErrorResponse
+            {
+                Description = "\nStart date must be greater than current date"
+            });
+        }
+        if (dateEnd && Date_End < Date_Start)
+        {
+            errors.Add(new ErrorResponse
+            {
+                Description = "\nEnd date must be greater than start date"
+            });
+        }
+        if (dateStart && dateEnd && Date_Start == Date_End)
+        {
+            errors.Add(new ErrorResponse
+            {
+                Description = "\nStart date must be different from end date"
+            });
+        }
+
+        //event price
+        if (eventRequest.Price == null)
+        {
+            errors.Add(new ErrorResponse
+            {
+                Description = "\nPrice can't be null"
+            });
+        }
+        if (eventRequest.Price < 0)
+        {
+            errors.Add(new ErrorResponse
+            {
+                Description = "\nPrice must be greater than or equal to 0"
+            });
+        }
+
+        //eventName
+        if (string.IsNullOrWhiteSpace(eventRequest.Name))
+        {
+            errors.Add(new ErrorResponse
+            {
+
+                Description = "\nEvent name can't be null or empty"
+            });
+        }
+        bool a = false;
+        foreach (var category in categoryNames)
+        {
+            if (category.Equals(eventRequest.CategoryName))
+            {
+                a = true;
+                break;
+            }
+        }
+        if (!a)
+        {
+            errors.Add(new ErrorResponse
+            {
+                Description = "\nCategory available:\n" + string.Join("\n", categoryNames.Select((name, index) => $"{index + 1}. {name}"))
+            });
+        }
+        return errors.Any() ? (errors.Select(e => e.Description).ToList(), false) : (new List<string>(), true);
+    }
+    public (List<string>, bool) ValidateEventStatus(string status, Event myEvent)
+    {
+        List<ErrorResponse> errors = new List<ErrorResponse>();
+        if (string.IsNullOrWhiteSpace(status))
+        {
+            errors.Add(new ErrorResponse
+            {
+                Description = "\nStatus can't be null or empty"
+            });
+
+        }
+       
+        if (!EventStatusConstant.AllStatuses.Contains(status))
+        {
+            errors.Add(new ErrorResponse
+            {
+                Description = "\nList of status:\n" + string.Join("\n", EventStatusConstant.AllStatuses.Select((s, index) => $"{index + 1}. {s}"))
+            });
+            return errors.Any() ? (errors.Select(e => e.Description).ToList(), false) : (new List<string>(), true);
+        }
+        bool a = true;
+        while (a && status != EventStatusConstant.SoldOut)
+        {
+            //event status là private
+            if (myEvent.Status == EventStatusConstant.Private && status != EventStatusConstant.Published)
+            {
+                errors.Add(new ErrorResponse
+                {
+                    Description = $"\nYou can't change status of private event to {status}\nAvailable status to update: Published"
+                });
+                break;
+            }
+            //event status là published
+            else if (myEvent.Status == EventStatusConstant.Published && status != EventStatusConstant.InProgress && status != EventStatusConstant.Cancelled && status != EventStatusConstant.Private)
+            {
+                errors.Add(new ErrorResponse
+                {
+                    Description = $"\nYou can't change status of published event to {status}\nAvailable status to update: InProgress, Cancelled"
+                });
+                break;
+            }
+            //event status là InProgress
+            else if (myEvent.Status == EventStatusConstant.InProgress && status != EventStatusConstant.Completed)
+            {
+                errors.Add(new ErrorResponse
+                {
+                    Description = $"\nYou can't change status of InProgress event to {status}\nAvailable status to update: Completed"
+                });
+                break;
+            }
+            //event status là Cancelled
+            else if (myEvent.Status == EventStatusConstant.Cancelled)
+            {
+                errors.Add(new ErrorResponse
+                {
+                    Description = $"\nYou can't change status of Cancelled event to {status}"
+                });
+                break;
+            }
+            //event status là Completed
+            else if (myEvent.Status == EventStatusConstant.Completed)
+            {
+                errors.Add(new ErrorResponse
+                {
+                    Description = $"\nYou can't change status of Completed event to {status}"
+                });
+                break;
+            }
+            //event status là SoldOut
+            else if (myEvent.Status == EventStatusConstant.SoldOut)
+            {
+                errors.Add(new ErrorResponse
+                {
+                    Description = $"\nYou can't change status of SoldOut event to {status}"
+                });
+                break;
+            }
+            a = false;
+        }
+        return errors.Any() ? (errors.Select(e => e.Description).ToList(), false) : (new List<string>(), true);
+    }
+
 }
