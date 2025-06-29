@@ -16,8 +16,8 @@ namespace WebTicket.Domain.Entities
 
         public string? Name { get; set; }
         public string? Description { get; set; }
-        public DateTime? Date_Start { get; set; }
-        public DateTime? Date_End { get; set; }
+        public DateTime Date_Start { get; set; }
+        public DateTime Date_End { get; set; }
         public int? Price { get; set; }
         public string? Status { get; set; }
         public int? Slot { get; set; }

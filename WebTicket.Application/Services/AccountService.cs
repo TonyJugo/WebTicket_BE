@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Caching.Memory;
 using System.Security.Claims;
 using WebTicket.Application.Abstracts;
-using WebTicket.Application.Contracts;
 using WebTicket.Domain.Constants;
 using WebTicket.Domain.Entities;
 using WebTicket.Domain.Enums;

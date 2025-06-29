@@ -20,6 +20,7 @@ using WebTicket.Infrastructure.QuartzJob;
 using WebTicket.Infrastructure.QuartzScheduler;
 using WebTicket.Infrastructure.Repositories;
 using WebTicket.Infrastructure.Seeder;
+using WebTicket.Infrastructure.VnPay;
 
 namespace WebTicket.API
 {
@@ -44,13 +45,18 @@ namespace WebTicket.API
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IEventRepository, EventRepository>();
             builder.Services.AddScoped<IEventService, EventService>();
-
+            builder.Services.AddScoped<IVnPayService, VnPayService>();
             builder.Services.AddScoped<IEventRepository, EventRepository>();
 
+            //http context accessor
+            builder.Services.AddHttpContextAccessor();
+            //add query collection
+            builder.Services.AddScoped<IQueryCollection, QueryCollection>();
             //add quartz job DI
             builder.Services.AddScoped<IEventJobScheduler, QuartzEventJobScheduler>();
             builder.Services.AddScoped<UpdateEventStatusJob>();
-
+            //add vnpay option
+            builder.Services.Configure<VnPayOptions>(builder.Configuration.GetSection(VnPayOptions.VnPayOptionsKey));
             //Add Quartz
             builder.Services.AddQuartz(opt =>
             {
@@ -70,6 +76,8 @@ namespace WebTicket.API
 
             //add memory cache
             builder.Services.AddMemoryCache();
+
+
 
             builder.Services.Configure<GmailOptions>(builder.Configuration.GetSection(GmailOptions.GmailOptionsKey));
             //lấy JwtOptions từ appsettings.json

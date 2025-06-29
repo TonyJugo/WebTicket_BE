@@ -364,6 +364,26 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "WebTicket.API.Controller.PaymentController",
+    "Method": "PaymentCallbackVnpay",
+    "RelativePath": "Unitic/Payment/callback-vnpay",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebTicket.API.Controller.PaymentController",
+    "Method": "CreatePaymentUrlVnpay",
+    "RelativePath": "Unitic/Payment/CreatePaymentUrlVnpay",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WebTicket.API.Controller.UniversityController",
     "Method": "GetAllUniversities",
     "RelativePath": "Unitic/University",

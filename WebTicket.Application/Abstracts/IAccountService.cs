@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using WebTicket.Application.Contracts;
 using WebTicket.Domain.Entities;
 using WebTicket.Domain.Requests;
 

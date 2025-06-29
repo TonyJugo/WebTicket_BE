@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using WebTicket.Application.Abstracts;
-using WebTicket.Application.Contracts;
 using WebTicket.Domain.Entities;
 using WebTicket.Domain.Requests;
 
