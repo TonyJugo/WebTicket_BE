@@ -20,7 +20,7 @@ namespace WebTicket.Domain.Entities
         public DateTime? Date_End { get; set; }
         public int? Price { get; set; }
         public string? Status { get; set; }
-
+        public int? Slot { get; set; }
         public string? CateID { get; set; }
         [JsonIgnore] // Prevent circular reference during serialization
 
